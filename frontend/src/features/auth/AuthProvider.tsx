@@ -1,56 +1,68 @@
-import { createContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
+import type { AuthResponse, user as User } from "../../types/auth";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-import { loginRequest, logoutRequest, refreshRequest, registerRequest } from "../../api/auth";
 import {
-  clearStoredAccessToken,
+  loginRequest,
+  logoutRequest,
+  refreshRequest,
+  registerRequest,
+} from "../../api/auth";
+import {
   clearStoredUser,
-  getStoredAccessToken,
   getStoredUser,
-  setStoredAccessToken,
   setStoredUser,
+  getStoredToken,
+  setStoredToken,
+  clearStoredToken,
 } from "../../lib/storage";
-import type { User } from "../../types/auth";
 
 type AuthContextValue = {
-  accessToken: string | null;
+  token: string | null;
   user: User | null;
   isAuthenticated: boolean;
   isBootstrapping: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<AuthResponse>;
+  loginWithGoogle: (token: string, user: User) => void;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+  ) => Promise<AuthResponse>;
   logout: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [accessToken, setAccessToken] = useState<string | null>(() => getStoredAccessToken());
+  const [token, setToken] = useState<string | null>(() => getStoredToken());
   const [user, setUser] = useState<User | null>(() => getStoredUser());
   const [isBootstrapping, setIsBootstrapping] = useState(true);
 
   useEffect(() => {
     async function bootstrap() {
-      const storedAccessToken = getStoredAccessToken();
+      const storedToken = getStoredToken();
       const storedUser = getStoredUser();
 
-      if (storedAccessToken && storedUser) {
-        setAccessToken(storedAccessToken);
+      // If they have a token and user cached locally, log them instantly
+      if (storedToken && storedUser) {
+        setToken(storedToken);
         setUser(storedUser);
         setIsBootstrapping(false);
         return;
       }
 
+      // if nothing found locally, see if the backend cookie/session can refresh them
       try {
         const response = await refreshRequest();
-        setAccessToken(response.accessToken);
+        setToken(response.token);
         setUser(response.user);
-        setStoredAccessToken(response.accessToken);
+        setStoredToken(response.token);
         setStoredUser(response.user);
       } catch {
-        clearStoredAccessToken();
+        clearStoredToken();
         clearStoredUser();
-        setAccessToken(null);
+        setToken(null);
         setUser(null);
       } finally {
         setIsBootstrapping(false);
@@ -62,34 +74,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<AuthContextValue>(
     () => ({
-      accessToken,
+      token,
       user,
-      isAuthenticated: Boolean(accessToken && user),
+      isAuthenticated: Boolean(token && user),
       isBootstrapping,
       async login(email, password) {
         const response = await loginRequest({ email, password });
-        setAccessToken(response.accessToken);
+        setToken(response.token);
         setUser(response.user);
-        setStoredAccessToken(response.accessToken);
+        setStoredToken(response.token);
         setStoredUser(response.user);
+
+        return response;
       },
-      async register(email, password) {
-        const response = await registerRequest({ email, password });
-        setAccessToken(response.accessToken);
+
+      loginWithGoogle(googleToken, googleUser) {
+        setToken(googleToken);
+        setUser(googleUser);
+        setStoredToken(googleToken);
+        setStoredUser(googleUser);
+      },
+
+      async register(name, email, password) {
+        const response = await registerRequest({ name, email, password });
+        setToken(response.token);
         setUser(response.user);
-        setStoredAccessToken(response.accessToken);
+        setStoredToken(response.token);
         setStoredUser(response.user);
+
+        return response;
       },
+
       async logout() {
-        await logoutRequest();
-        clearStoredAccessToken();
-        clearStoredUser();
-        setAccessToken(null);
-        setUser(null);
+        try {
+          await logoutRequest();
+        } catch (error) {
+          console.error("Backend logout failed", error);
+        } finally {
+          clearStoredToken();
+          clearStoredUser();
+          setToken(null);
+          setUser(null);
+        }
       },
     }),
-    [accessToken, isBootstrapping, user],
+    [token, isBootstrapping, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return ctx;
+};

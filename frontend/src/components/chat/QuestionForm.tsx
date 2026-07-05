@@ -1,5 +1,5 @@
 import type { FormEvent } from "react";
-import type { StructuredContext } from "../types/chat";
+import type { StructuredContext } from "../../types/chat"
 
 type QuestionFormProps = {
   structuredContext: StructuredContext;
@@ -79,7 +79,7 @@ export function QuestionForm({
             disabled={isLoading}
           />
 
-          <button className="primary-button" type="submit" disabled={isLoading}>
+          <button className="primary-button-form" type="submit" disabled={isLoading}>
             {isLoading ? "Asking..." : "Ask"}
           </button>
         </div>

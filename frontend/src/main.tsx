@@ -4,8 +4,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "sonner";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import { App } from "./app/App";
-// import { AuthProvider } from "./features/auth/AuthProvider";
+import { AuthProvider } from "./features/auth/AuthProvider";
 
 const queryClient = new QueryClient();
 
@@ -13,10 +15,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        {/* <AuthProvider> */}
-          <App />
-          <Toaster richColors position="top-right" />
-        {/* </AuthProvider> */}
+        <AuthProvider>
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <App />
+            <Toaster richColors position="top-right" />
+          </GoogleOAuthProvider>
+        </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,

@@ -18,18 +18,18 @@ const chatBodySchema = z.object({
 
 export const createChatTurn = asyncHandler(async (req, res) => {
   const body = chatBodySchema.parse(req.body);
-  const result = await handleMockChat(body);
+  const result = await handleMockChat({...body, userId: req.user.userId});
 
   res.status(201).json(result);
 });
 
 export const getChatSessions = asyncHandler(async (_req, res) => {
-  const sessions = await listChatSessions();
+  const sessions = await listChatSessions(req.user.userId);
   res.status(200).json({ sessions });
 });
 
 export const getChatSessionById = asyncHandler(async (req, res) => {
   const sessionId = z.string().parse(req.params.id);
-  const session = await getChatSession(sessionId);
+  const session = await getChatSession(sessionId, req.user.userId);
   res.status(200).json(session);
 });

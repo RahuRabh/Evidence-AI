@@ -1,12 +1,13 @@
-export type User = {
+export type user = {
   id: string;
   email: string;
-  createdAt: string;
-  updatedAt: string;
+  name: string;
+  picture?: string;
+  role: string;
 };
 
 export type AuthResponse = {
-  message: string;
-  accessToken: string;
-  user: User;
+  token: string;
+  message?: string;
+  user: user;
 };

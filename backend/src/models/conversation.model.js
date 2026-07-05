@@ -2,6 +2,12 @@ import { Schema, model } from "mongoose";
 
 const conversationSchema = new Schema(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
     patientName: {
       type: String,
       trim: true,

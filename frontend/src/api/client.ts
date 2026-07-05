@@ -9,7 +9,7 @@ import {
 } from "../lib/storage";
 import type { AuthResponse } from "../types/auth";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api";
 
 export const api = axios.create({
   baseURL: apiBaseUrl,
@@ -34,17 +34,26 @@ async function refreshAccessToken() {
     withCredentials: true,
   });
 
-  setStoredAccessToken(response.data.accessToken);
+  setStoredAccessToken(response.data.token);
   setStoredUser(response.data.user);
 
-  return response.data.accessToken;
+  return response.data.token;
 }
 
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config as { _retry?: boolean; headers?: Record<string, string> };
+    // const originalRequest = error.config as { _retry?: boolean; headers?: Record<string, string> };
+    const originalRequest = error.config;
 
+    const requestUrl = originalRequest?.url || "";
+
+    // If it's a 401 BUT it's coming from login or register, do NOT try to refresh token.
+    if (requestUrl.includes("/login") || requestUrl.includes("/register")) {
+      return Promise.reject(error);
+    }
+
+    // Existing fallback check
     if (error.response?.status !== 401 || originalRequest?._retry) {
       return Promise.reject(error);
     }

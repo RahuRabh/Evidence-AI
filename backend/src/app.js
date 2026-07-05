@@ -36,7 +36,8 @@ export function createApp() {
   app.get("/test", (_req, res) => {
   res.send("working");
 });
-  app.use("/api", apiRouter);
+
+app.use("/api", apiRouter);
 
   return app;
 }

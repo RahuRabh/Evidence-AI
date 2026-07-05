@@ -255,8 +255,6 @@ export function rankSources({
     highestScore: Number((rankedSources[0]?.scores?.final ?? 0).toFixed(3)),
   };
 
-  // temporarily
-  console.log("\nTOP RESULTS:");
   rankedSources.slice(0, 5).forEach((s, i) => {
     console.log({
       rank: i + 1,

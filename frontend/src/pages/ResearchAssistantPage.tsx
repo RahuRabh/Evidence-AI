@@ -2,15 +2,17 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { getChatSession, getChatSessions, sendChatMessage } from "../api/chat";
-import { AnswerSections } from "../components/AnswerSections";
+import { AnswerSections } from "../components/chat/AnswerSections";
 import type {
   ChatMessage,
   ChatSessionSummary,
   ResearchAnswer,
   StructuredContext,
 } from "../types/chat";
-import { QuestionForm } from "../components/QuestionForm";
-import { Sidebar } from "../components/Sidebar";
+import { QuestionForm } from "../components/chat/QuestionForm";
+import { Sidebar } from "../components/chat/Sidebar";
+import { useAuth } from "../features/auth/AuthProvider";
+import { AuthModal } from "../components/auth/AuthModal";
 
 const emptyContext: StructuredContext = {
   patientName: "",
@@ -18,13 +20,6 @@ const emptyContext: StructuredContext = {
   intent: "",
   location: "",
 };
-
-// const exampleContext: StructuredContext = {
-//   patientName: "John Smith",
-//   disease: "Parkinson's disease",
-//   intent: "Deep Brain Stimulation",
-//   location: "Toronto, Canada",
-// };
 
 function makeId() {
   return crypto.randomUUID();
@@ -50,32 +45,8 @@ export function ResearchAssistantPage() {
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [error, setError] = useState("");
-
-  // const latestAssistant = useMemo(
-  //   () => [...messages].reverse().find((item) => item.role === "assistant"),
-  //   [messages],
-  // );
-
-  // const latestSources =
-  //   latestAssistant?.role === "assistant" ? latestAssistant.sources : [];
-  // const latestMetadata =
-  //   latestAssistant?.role === "assistant"
-  //     ? latestAssistant.metadata
-  //     : undefined;
-  // const publications = latestSources
-  //   .filter(
-  //     (source) =>
-  //       source.type === "publication" ||
-  //       source.platform !== "ClinicalTrials.gov",
-  //   )
-  //   .slice(0, 5);
-  // const trials = latestSources
-  //   .filter(
-  //     (source) =>
-  //       source.type === "clinical_trial" ||
-  //       source.platform === "ClinicalTrials.gov",
-  //   )
-  //   .slice(0, 5);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const auth = useAuth();
 
   async function refreshSessions() {
     try {
@@ -96,11 +67,6 @@ export function ResearchAssistantPage() {
       [field]: value,
     }));
   }
-
-  // function loadExample() {
-  //   setStructuredContext(exampleContext);
-  //   setMessage("What does the research say about this treatment?");
-  // }
 
   function startNewConversation() {
     setConversationId(null);
@@ -157,6 +123,11 @@ export function ResearchAssistantPage() {
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+
+    if (!auth.isAuthenticated) {
+      setIsAuthModalOpen(true);
+      return;
+    }
 
     const trimmedMessage = message.trim() || structuredContext.intent.trim();
 
@@ -217,6 +188,7 @@ export function ResearchAssistantPage() {
         onNewConversation={startNewConversation}
         onOpenSession={(id) => void openSession(id)}
         onCloseSidebar={() => setIsSidebarOpen(false)}
+        loginModal={() => setIsAuthModalOpen(true)}
       />
 
       <section className="research-workspace">
@@ -276,6 +248,17 @@ export function ResearchAssistantPage() {
           />
         </section>
       </section>
+
+      {isAuthModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsAuthModalOpen(false)}>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <AuthModal
+              open={isAuthModalOpen}
+              onClose={() => setIsAuthModalOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </main>
   );
 }

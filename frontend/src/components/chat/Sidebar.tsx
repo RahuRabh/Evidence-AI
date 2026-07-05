@@ -1,4 +1,5 @@
-import type { ChatSessionSummary } from "../types/chat";
+import type { ChatSessionSummary } from "../../types/chat";
+import { useAuth } from "../../features/auth/AuthProvider";
 
 type SidebarProps = {
   sessions: ChatSessionSummary[];
@@ -8,6 +9,7 @@ type SidebarProps = {
   onCloseSidebar: () => void;
   onNewConversation: () => void;
   onOpenSession: (sessionId: string) => void;
+  loginModal: () => void;
 };
 
 export function Sidebar({
@@ -18,7 +20,10 @@ export function Sidebar({
   onCloseSidebar,
   onNewConversation,
   onOpenSession,
+  loginModal,
 }: SidebarProps) {
+  const { isAuthenticated, user, logout } = useAuth();
+
   return (
     <>
       <div
@@ -92,6 +97,25 @@ export function Sidebar({
               </p>
             )}
           </div>
+        </section>
+
+        <section className="sidebar-footer">
+          {isAuthenticated ? (
+            <div className="user-info">
+              <p className="user-email">{user?.name}</p>
+              <img
+                src={user?.picture}
+                alt={user?.name || "user profile"}
+                referrerPolicy="no-referrer"
+                crossOrigin="anonymous"
+              />
+              <button className="logout-button" onClick={logout}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button onClick={loginModal} className="muted-text">Log In</button>
+          )}
         </section>
       </aside>
     </>

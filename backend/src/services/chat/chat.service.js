@@ -17,13 +17,13 @@ function getContextValue(nextValue, fallback = "") {
   return nextValue?.trim() || fallback;
 }
 
-async function getOrCreateConversation(conversationId, context) {
+async function getOrCreateConversation(conversationId, context, userId) {
   if (conversationId) {
     if (!Types.ObjectId.isValid(conversationId)) {
       throw new AppError("Invalid conversationId", 400);
     }
 
-    const conversation = await Conversation.findById(conversationId);
+    const conversation = await Conversation.findOne({id: conversationId, userId});
 
     if (!conversation) {
       throw new AppError("Conversation not found", 404);
@@ -51,6 +51,7 @@ async function getOrCreateConversation(conversationId, context) {
   }
 
   return Conversation.create({
+    userId,
     patientName: context.patientName?.trim() ?? "",
     activeDisease: context.disease?.trim() ?? "",
     activeIntent: context.intent?.trim() ?? "",
@@ -63,6 +64,7 @@ export async function handleMockChat(input) {
   const conversation = await getOrCreateConversation(
     input.conversationId,
     structuredContext,
+    input.userId
   );
   const understoodQuery = await understandQuery({
     message: input.message,
@@ -191,8 +193,8 @@ export async function handleMockChat(input) {
   };
 }
 
-export async function listChatSessions() {
-  const conversations = await Conversation.find()
+export async function listChatSessions(userId) {
+  const conversations = await Conversation.find({userId})
     .sort({ updatedAt: -1 })
     .limit(20)
     .lean();
@@ -213,12 +215,15 @@ export async function listChatSessions() {
   }));
 }
 
-export async function getChatSession(conversationId) {
+export async function getChatSession(conversationId, userId) {
   if (!Types.ObjectId.isValid(conversationId)) {
     throw new AppError("Invalid conversationId", 400);
   }
 
-  const conversation = await Conversation.findById(conversationId).lean();
+  const conversation = await Conversation.findOne({
+    _id: conversationId,
+    userId,
+  }).lean();
 
   if (!conversation) {
     throw new AppError("Conversation not found", 404);

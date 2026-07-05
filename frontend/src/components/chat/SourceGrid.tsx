@@ -1,5 +1,5 @@
 import { SourceCard } from "./SourceCard";
-import type { ResearchSource } from "../types/chat";
+import type { ResearchSource } from "../../types/chat";
 
 type SourceGridProps = {
   title: string;

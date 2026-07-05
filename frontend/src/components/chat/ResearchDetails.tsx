@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { RetrievalMetadata } from "../types/chat";
+import type { RetrievalMetadata } from "../../types/chat";
 
 type ResearchDetailsProps = {
   metadata: RetrievalMetadata;
