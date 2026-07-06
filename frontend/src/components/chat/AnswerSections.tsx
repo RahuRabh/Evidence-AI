@@ -2,7 +2,7 @@ import type {
   ResearchAnswer,
   ResearchSource,
   RetrievalMetadata,
-} from "../types/chat";
+} from "../../types/chat"
 
 import { SourceCard } from "./SourceCard";
 import { ResearchDetails } from "./ResearchDetails";

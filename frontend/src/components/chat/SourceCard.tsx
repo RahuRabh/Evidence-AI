@@ -1,4 +1,4 @@
-import type { ResearchSource } from "../types/chat";
+import type { ResearchSource } from "../../types/chat"
 
 interface SourceCardProps {
   source: ResearchSource;
