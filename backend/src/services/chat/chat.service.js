@@ -23,7 +23,10 @@ async function getOrCreateConversation(conversationId, context, userId) {
       throw new AppError("Invalid conversationId", 400);
     }
 
-    const conversation = await Conversation.findOne({id: conversationId, userId});
+    const conversation = await Conversation.findOne({
+      _id: conversationId,
+      userId,
+    });
 
     if (!conversation) {
       throw new AppError("Conversation not found", 404);
@@ -59,13 +62,14 @@ async function getOrCreateConversation(conversationId, context, userId) {
   });
 }
 
-export async function handleMockChat(input) {
+export async function processChatRequest(input) {
   const structuredContext = input.structuredContext ?? {};
   const conversation = await getOrCreateConversation(
     input.conversationId,
     structuredContext,
-    input.userId
+    input.userId,
   );
+
   const understoodQuery = await understandQuery({
     message: input.message,
     structuredContext,
@@ -127,9 +131,10 @@ export async function handleMockChat(input) {
     });
 
     const rawAnswer = await generateGroqMedicalAnswer(prompt);
-
     answer = parserMedicalAnswer(rawAnswer, ranking.topSources);
   } catch (error) {
+    console.error("========== LLM ERROR ==========", error);
+
     answer = {
       conditionOverview:
         "The language model is temporarily unavailable. Showing the strongest ranked evidence instead.",
@@ -194,7 +199,7 @@ export async function handleMockChat(input) {
 }
 
 export async function listChatSessions(userId) {
-  const conversations = await Conversation.find({userId})
+  const conversations = await Conversation.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(20)
     .lean();

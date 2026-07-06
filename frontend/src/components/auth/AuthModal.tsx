@@ -7,8 +7,10 @@ type AuthModalProps = {
   onClose: () => void;
 };
 
+export type AuthMode = "login" | "register" | "forgot" | "verify";
+
 export function AuthModal({ open, onClose }: AuthModalProps) {
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const [mode, setMode] = useState<AuthMode>("login");
 
   if (!open) return null;
 
@@ -21,9 +23,9 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
         </button>
         <p>Access your saved conversations and AI-powerder medical research.</p>
       </div>
-      <AuthForm mode={mode} onSuccess={onClose} />
+      <AuthForm mode={mode} setMode={setMode} onSuccess={onClose} />
       <span>
-        {mode === "login" ? (
+        {mode === "login" && (
           <>
             <p>Don't have an account?</p>
             <button
@@ -34,7 +36,8 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
               Create one
             </button>
           </>
-        ) : (
+        )}
+        {mode === "register" && (
           <>
             <p>Already have an account?</p>
             <button
@@ -46,11 +49,23 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
             </button>
           </>
         )}
+        {(mode === "forgot" || mode === "verify") && (
+          <button
+            className="auth-footer-button"
+            type="button"
+            onClick={() => setMode("login")}
+          >
+            ← Back to Log In
+          </button>
+        )}
       </span>
-      <div className="auth-divider">
-        <p>OR</p>
-        <GoogleLoginButton onClose={onClose} />
-      </div>
+
+      {(mode === "login" || mode === "register") && (
+        <div className="auth-divider">
+          <p>OR</p>
+          <GoogleLoginButton onClose={onClose} />
+        </div>
+      )}
     </div>
   );
 }

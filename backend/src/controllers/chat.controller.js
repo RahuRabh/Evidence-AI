@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { getChatSession, handleMockChat, listChatSessions } from "../services/chat/chat.service.js";
+import { getChatSession, processChatRequest, listChatSessions } from "../services/chat/chat.service.js";
 import { asyncHandler } from "../utils/async-handler.js";
 
 const chatBodySchema = z.object({
@@ -18,12 +18,12 @@ const chatBodySchema = z.object({
 
 export const createChatTurn = asyncHandler(async (req, res) => {
   const body = chatBodySchema.parse(req.body);
-  const result = await handleMockChat({...body, userId: req.user.userId});
+  const result = await processChatRequest({...body, userId: req.user.userId});
 
   res.status(201).json(result);
 });
 
-export const getChatSessions = asyncHandler(async (_req, res) => {
+export const getChatSessions = asyncHandler(async (req, res) => {
   const sessions = await listChatSessions(req.user.userId);
   res.status(200).json({ sessions });
 });
