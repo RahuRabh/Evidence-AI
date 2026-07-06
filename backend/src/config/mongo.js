@@ -8,6 +8,7 @@ export async function connectMongo() {
   }
 
   await mongoose.connect(env.MONGO_URI);
+
   return mongoose.connection;
 }
 

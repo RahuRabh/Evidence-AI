@@ -5,7 +5,11 @@ import { OAuth2Client } from "google-auth-library";
 
 import { User } from "../../models/user.js";
 
-import {sendAuthResponse} from "../../utils/sendAuthResponse.js";
+import { sendAuthResponse } from "../../utils/sendAuthResponse.js";
+import { mailSender } from "../../utils/mailSender.js";
+
+import crypto from "crypto";
+import { hashOTP } from "../../utils/hash.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const normalizeEmail = (email) => email.trim().toLowerCase();
@@ -48,12 +52,7 @@ async function googleAuthHandler(req, res) {
       await user.save();
     }
 
-    return sendAuthResponse(
-      res,
-      user,
-      200,
-      "Logged in !!",
-    );
+    return sendAuthResponse(res, user, 200, "Logged in !!");
   } catch (err) {
     console.error("Google auth error:", err);
     res.status(401).json({ error: "Token verification failed" });
@@ -78,7 +77,7 @@ async function loginHandler(req, res) {
     // Check If USER SIGNED UP VIA GOOGLE AND HAS NO PASSWORD
     if (!user.password) {
       return res.status(400).json({
-        error: "This account uses Google Sign-In. Please log in via Google"
+        error: "This account uses Google Sign-In. Please log in via Google",
       });
     }
 
@@ -168,10 +167,114 @@ async function logoutHandler(req, res) {
   }
 }
 
+async function forgotPasswordHandler(req, res) {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: "Email is required" });
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(200).json({
+        message: "If email is registered, an OTP code has been sent.",
+      });
+    }
+
+    // Limiting otp generation for 60 sec before new otp generation is requested
+    const now = Date.now();
+    if (user.otpLastSentAt && now - user.otpLastSentAt.getTime() < 60 * 1000) {
+      return res.status(429).json({
+        error: "Please wait 60 seconds before requesting another OTP.",
+      });
+    }
+
+    // Generate cryptographic secure 6-digit number
+    const otpCode = crypto.randomInt(100000, 1000000).toString();
+
+    // Persist to user recode;
+    user.resetOtp = hashOTP(otpCode);
+    user.resetOtpExpires = Date.now() + 600000;
+    user.resetOtpAttempts = 0;
+    user.otpLastSentAt = new Date();
+
+    await user.save();
+
+    // Execute mail worker passing the parameters
+    await mailSender(user.email, otpCode);
+
+    return res
+      .status(200)
+      .json({ message: "If mail is registerd, OTP code has been sent." });
+  } catch (error) {
+    console.error("Forgot Password Error:", error);
+    return res.status(500).json({ error: "Interal server error" });
+  }
+}
+
+async function verifyOTP(req, res) {
+  try {
+    const { email, otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ error: "All input fields are required" });
+    }
+
+    // Find user matching email, active OTP, check expiration time
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ error: "Invalid or expired OTP code." });
+    }
+
+    // OTP expired
+    if (
+      !user.resetOtp ||
+      !user.resetOtpExpires ||
+      user.resetOtpExpires < new Date()
+    ) {
+      return res.status(400).json({
+        error: "OTP has expired. Please request new one.",
+      });
+    }
+
+    // Too many attemps
+    if (user.resetOtpAttempts >= 5) {
+      return res.status(403).json({
+        error: "Too many incorrect attemps. Request a new OTP.",
+      });
+    }
+
+    // Compare hash
+    if (user.resetOtp !== hashOTP(otp)) {
+      const remainingAttempts = 5 - user.resetOtpAttempts;
+      user.resetOtpAttempts += 1;
+      await user.save();
+      return res.status(400).json({
+        error: `Incorrect OTP. ${remainingAttempts} attempt${remainingAttempts === 1 ? "" : "s"} remaining.`,
+      });
+    }
+
+    // Hash and update password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    // clear otp fields
+    user.resetOtp = null;
+    user.resetOtpExpires = null;
+    user.resetOtpAttempts = 0;
+    user.otpLastSentAt = null;
+
+    await user.save();
+    return res.status(200).json({ message: "Password updated successfully." });
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 export {
   googleAuthHandler,
   loginHandler,
   registerHandler,
   refreshHandler,
   logoutHandler,
+  forgotPasswordHandler,
+  verifyOTP,
 };
