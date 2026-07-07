@@ -2,7 +2,7 @@ import type {
   ResearchAnswer,
   ResearchSource,
   RetrievalMetadata,
-} from "../../types/chat"
+} from "../../types/chat";
 
 import { SourceCard } from "./SourceCard";
 import { ResearchDetails } from "./ResearchDetails";
@@ -11,19 +11,24 @@ interface AnswerSectionsProps {
   answer: ResearchAnswer;
   sources?: ResearchSource[];
   metadata?: RetrievalMetadata;
+  isHistoryLoading: boolean;
 }
 
 export function AnswerSections({
   answer,
   sources = [],
   metadata,
+  isHistoryLoading,
 }: AnswerSectionsProps) {
-
   const publications = sources.filter((s) => s.type !== "clinical_trial");
   const trials = sources.filter((s) => s.type === "clinical_trial");
 
   return (
     <div className="answer-sections">
+      {isHistoryLoading ? (
+        <p className="muted-text">Loading session...</p>
+      ) : null}
+
       <div className="answer-card">
         <p className="answer-card-label">Condition overview</p>
         <p>{answer.conditionOverview}</p>
@@ -91,7 +96,6 @@ export function AnswerSections({
       )}
 
       {metadata ? <ResearchDetails metadata={metadata} /> : null}
-
     </div>
   );
 }

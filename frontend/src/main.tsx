@@ -1,13 +1,15 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "sonner";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { App } from "./app/App";
+
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AuthProvider } from "./features/auth/AuthProvider";
+import { ChatProvider } from "./features/chat/ChatProvider";
 
 const queryClient = new QueryClient();
 
@@ -16,10 +18,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-            <App />
-            <Toaster richColors position="top-right" />
-          </GoogleOAuthProvider>
+          <ChatProvider>
+            <GoogleOAuthProvider
+              clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+            >
+              <App />
+              <Toaster richColors position="top-right" />
+            </GoogleOAuthProvider>
+          </ChatProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
