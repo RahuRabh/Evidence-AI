@@ -346,8 +346,6 @@ a {
   gap: 0.8rem;
 }
 
-/* Source Card */
-
 .source-card {
   display: flex;
   flex-direction: column;
@@ -372,11 +370,6 @@ a {
   background: linear-gradient(180deg, #f8fbff 0%, #f1f7ff 100%);
   border: 1px solid #dbeafe;
 }
-
-/* .source-card.trial-card {
-  background: #f5fdf8;
-  border-color: #d7f2df;
-} */
 
 .source-card.trial-card {
   background: linear-gradient(180deg, #f6fef8 0%, #eefcf2 100%);
@@ -794,30 +787,23 @@ a {
   font-size: 0.82rem;
 }
 
-.modal-overlay{
+.modal-overlay,
+.workspace-overlay {
     position:fixed;
     inset:0;
-
     background:rgba(15,23,42,.55);
-
     backdrop-filter:blur(8px);
-
     display:flex;
     justify-content:center;
     align-items:center;
-
     z-index:999;
-
     animation:fadeIn .2s ease;
 }
 
 .modal-container{
-
     width:100%;
     max-width:440px;
-
     margin:20px;
-
     animation:scaleIn .22s ease;
 }
 
@@ -870,24 +856,20 @@ a {
   position: absolute;
   top: 20px;
   right: 18px;
-
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
   padding: 0;
-
   background: transparent;
   border: none;
   outline: none;
   cursor: pointer;
-    
   font-size: 18px;
   font-weight: 600;
   color: #ec3a3a;
   border-radius: 50%;
-    
   transition: all 0.2s ease-in-out;
 }
 
@@ -901,37 +883,24 @@ a {
 
 .auth-divider::before,
 .auth-divider::after{
-
     content:"";
-
     flex:1;
-
     height:1px;
-
     background:#e5e7eb;
 }
 
 .auth-footer{
-
     margin-top:26px;
-
     text-align:center;
-
     color:#64748b;
-
     font-size:.95rem;
 }
 
 .auth-footer button{
-
     border:none;
-
     background:none;
-
     color:#2563eb;
-
     cursor:pointer;
-
     font-weight:600;
 }
 
@@ -942,15 +911,135 @@ a {
 
 .user-info {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
+  padding: 0.3rem 1.5rem;
+  background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+  width: 100%;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.user-info p {
+  font-weight: 600;
+  font-size: medium;
 }
 
 .user-info img {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
+}
+
+.pop-over-container {
+  width: 280px;
+  background-color: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 16px 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1f1f1f;
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  z-index: 100;
+}
+
+.pop-over-header {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px;
+  position: relative;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.pop-over-name,
+.pop-over-email {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #444746;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #444746;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.profile-close-button:hover {
+  background-color: #f0f4f9;
+}
+
+.pop-over-divider {
+  height: 1px;
+  background-color: #e3e3e3;
+  margin: 5px 0;
+}
+
+.pop-over-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.pop-over-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px;
+  margin: 0;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f1f1f;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: left;
+  border-radius: 24px;
+}
+
+.pop-over-item .icon {
+  margin-right: 10px;
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.pop-over-item:hover {
+  background-color: #f0f4f9;
+}
+
+.logout-action {
+  color: #ba1a1a;
+}
+
+.logout-action .icon {
+  padding: 0px 8px;
+  margin-right: 16px;
+}
+
+.logout-action:hover {
+  background-color: #ffedec;
 }
 
 @keyframes spin {
@@ -1073,6 +1162,16 @@ transform:scale(1);
     background: transparent;
     font-size: 1.4rem;
     cursor: pointer;
+  }
+
+  .profile-close-button {
+    display: block;
+    border: 0;
+    /* background: transparent; */
+    font-size: 1rem;
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
   }
 
   .chat-window {

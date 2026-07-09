@@ -7,10 +7,13 @@ import { Sidebar } from "../components/chat/Sidebar";
 import { useAuth } from "../features/auth/AuthProvider";
 import { AuthModal } from "../components/auth/AuthModal";
 import { useChat } from "../features/chat/useChat";
+import { WorkSpaceDialog } from "../features/profile/components/WorkSpaceDialog";
+import { useWorkSpace } from "../features/workspace/useWorkSpace";
 
 export function ResearchAssistantPage() {
   const auth = useAuth();
   const chat = useChat();
+  const { activeView } = useWorkSpace();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -89,7 +92,7 @@ export function ResearchAssistantPage() {
                     className="chat-message assistant-message"
                     key={item.id}
                   >
-                    <span>CuraLink</span>
+                    {/* <span>CuraLink</span> */}
                     <AnswerSections
                       answer={item.answer}
                       sources={item.sources}
@@ -133,6 +136,14 @@ export function ResearchAssistantPage() {
             />
           </div>
         </div>
+      )}
+
+      {activeView && (
+        <section className="workspace-overlay">
+          {activeView === "profile" && <WorkSpaceDialog />}
+          {activeView === "security" && <WorkSpaceDialog />}
+          {activeView === "settings" && <WorkSpaceDialog />}
+        </section>
       )}
     </main>
   );

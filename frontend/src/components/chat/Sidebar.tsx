@@ -1,5 +1,9 @@
+import { useState } from "react";
+
 import type { ChatSessionSummary } from "../../types/chat";
 import { useAuth } from "../../features/auth/AuthProvider";
+
+import { UserMenu } from "../../features/profile/UserMenu";
 
 type SidebarProps = {
   sessions: ChatSessionSummary[];
@@ -22,7 +26,10 @@ export function Sidebar({
   onOpenSession,
   loginModal,
 }: SidebarProps) {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const toggleUserMenu = () => setShowUserMenu((prev) => !prev);
 
   return (
     <>
@@ -101,20 +108,32 @@ export function Sidebar({
 
         <section className="sidebar-footer">
           {isAuthenticated ? (
-            <div className="user-info">
-              <p className="user-email">{user?.name}</p>
+            <div onClick={toggleUserMenu} className="user-info">
+              {showUserMenu && (
+                <UserMenu onClose={() => setShowUserMenu(false)} />
+              )}
+              <p>
+                {user?.name
+                  ? user.name
+                      .trim()
+                      .split(/\s+/)
+                      .map((word) => word[0])
+                      .join("")
+                      .toUpperCase()
+                  : "NA"}
+              </p>
               <img
                 src={user?.picture}
                 alt={user?.name || "user profile"}
                 referrerPolicy="no-referrer"
                 crossOrigin="anonymous"
+                onError={(e) => (e.currentTarget.style.display = "none")}
               />
-              <button className="logout-button" onClick={logout}>
-                Logout
-              </button>
             </div>
           ) : (
-            <button onClick={loginModal} className="muted-text">Log In</button>
+            <button onClick={loginModal} className="logout-action">
+              Log In
+            </button>
           )}
         </section>
       </aside>
