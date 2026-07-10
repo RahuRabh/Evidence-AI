@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { ChatSessionSummary } from "../../types/chat";
 import { useAuth } from "../../features/auth/AuthProvider";
 
-import { UserMenu } from "../../features/profile/UserMenu";
+import { UserMenu } from "../../features/settings/components/UserMenu"
 
 type SidebarProps = {
   sessions: ChatSessionSummary[];

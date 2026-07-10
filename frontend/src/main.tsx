@@ -10,7 +10,7 @@ import { App } from "./app/App";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AuthProvider } from "./features/auth/AuthProvider";
 import { ChatProvider } from "./features/chat/ChatProvider";
-import { WorkSpaceProvider } from "./features/workspace/WorkSpaceProvider";
+import { SettingsProvider } from "./features/settings/context/SettingsProvider";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <WorkSpaceProvider>
+          <SettingsProvider>
             <ChatProvider>
               <GoogleOAuthProvider
                 clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
@@ -28,7 +28,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Toaster richColors position="top-right" />
               </GoogleOAuthProvider>
             </ChatProvider>
-          </WorkSpaceProvider>
+          </SettingsProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

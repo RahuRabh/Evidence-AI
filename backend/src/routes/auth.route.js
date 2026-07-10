@@ -7,6 +7,7 @@ import {
   refreshHandler,
   forgotPasswordHandler,
   verifyOTP,
+  updatePasswordHandler,
 } from "../services/auth/auth.js";
 
 export const authRouter = Router();

@@ -7,7 +7,10 @@ import {
   logoutRequest,
   refreshRequest,
   registerRequest,
+  UpdatePasswordPayload,
+  updatePasswordRequest,
 } from "../../api/auth";
+
 import {
   clearStoredUser,
   getStoredUser,
@@ -16,6 +19,8 @@ import {
   setStoredToken,
   clearStoredToken,
 } from "../../lib/storage";
+
+import { UpdateProfilePayload, updateProfileRequest } from "../../api/profile";
 
 type AuthContextValue = {
   token: string | null;
@@ -29,6 +34,8 @@ type AuthContextValue = {
     email: string,
     password: string,
   ) => Promise<AuthResponse>;
+  updateProfile: (payload: UpdateProfilePayload) => Promise<AuthResponse>;
+  updatePassword: (payload: UpdatePasswordPayload) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -101,6 +108,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(response.user);
         setStoredToken(response.token);
         setStoredUser(response.user);
+
+        return response;
+      },
+
+      async updateProfile(payload: UpdateProfilePayload) {
+        const response = await updateProfileRequest(payload);
+        setUser(response.user);
+        setStoredUser(response.user);
+
+        return response;
+      },
+
+      async updatePassword(payload: UpdatePasswordPayload) {
+        const response = await updatePasswordRequest(payload);
+        setToken(response.token);
+        setStoredUser(response.token);
 
         return response;
       },

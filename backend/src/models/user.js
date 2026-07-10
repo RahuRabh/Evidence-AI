@@ -6,7 +6,7 @@ const userSchema = new Schema(
       type: String,
       required: false,
       unique: true,
-      sparse: true, // allows multiple null/missing values without unique collisions
+      sparse: true,
       index: true,
     },
     email: {

@@ -144,18 +144,6 @@ export function AuthForm({ onSuccess, mode, setMode }: AuthFormProps) {
           </button>
         )}
 
-        {/* <label className="field">
-          <span>Password</span>
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="Minimum 8 characters"
-            minLength={8}
-            required
-          />
-        </label> */}
-
         {error ? <p className="form-error">{error}</p> : null}
 
         <button

@@ -1,5 +1,6 @@
 import type { FormEvent } from "react";
-import type { StructuredContext } from "../../types/chat"
+import type { StructuredContext } from "../../types/chat";
+import { InputField } from "../ui/InputField";
 
 type QuestionFormProps = {
   structuredContext: StructuredContext;
@@ -24,49 +25,38 @@ export function QuestionForm({
     <form className="question-palette" onSubmit={onSubmit}>
       <div className="question-palette-inner">
         <div className="context-fields">
-          <label className="field">
-            <span>Patient optional</span>
-            <input
-              value={structuredContext.patientName}
-              onChange={(event) =>
-                onContextChange("patientName", event.target.value)
-              }
-              placeholder="John Smith"
-            />
-          </label>
+          
+          <InputField
+            type={"string"}
+            label={"Patient Optional"}
+            value={structuredContext.patientName}
+            onChange={(newValue) => onContextChange("patientName", newValue)}
+            placeholder={"John Smith"}
+          />
 
-          <label className="field">
-            <span>Disease</span>
-            <input
-              value={structuredContext.disease}
-              onChange={(event) =>
-                onContextChange("disease", event.target.value)
-              }
-              placeholder="Parkinson's disease"
-            />
-          </label>
+          <InputField
+            type={"string"}
+            label={"Disease"}
+            value={structuredContext.disease}
+            onChange={(newValue) => onContextChange("disease", newValue)}
+            placeholder={"Parkinson's disease"}
+          />
 
-          <label className="field">
-            <span>Intent</span>
-            <input
-              value={structuredContext.intent}
-              onChange={(event) =>
-                onContextChange("intent", event.target.value)
-              }
-              placeholder="Deep Brain Stimulation"
-            />
-          </label>
+          <InputField
+            type={"string"}
+            label={"Intent"}
+            value={structuredContext.intent}
+            onChange={(newValue) => onContextChange("intent", newValue)}
+            placeholder={"Deep Brain Stimulation"}
+          />
 
-          <label className="field">
-            <span>Location optional</span>
-            <input
-              value={structuredContext.location}
-              onChange={(event) =>
-                onContextChange("location", event.target.value)
-              }
-              placeholder="Toronto, Canada"
-            />
-          </label>
+          <InputField
+            type={"string"}
+            label={"Location optional"}
+            value={structuredContext.location}
+            onChange={(newValue) => onContextChange("location", newValue)}
+            placeholder={"Toronto, Canada"}
+          />
         </div>
 
         <div className="message-row">
@@ -79,7 +69,11 @@ export function QuestionForm({
             disabled={isLoading}
           />
 
-          <button className="primary-button-form" type="submit" disabled={isLoading}>
+          <button
+            className="primary-button-form"
+            type="submit"
+            disabled={isLoading}
+          >
             {isLoading ? "Asking..." : "Ask"}
           </button>
         </div>

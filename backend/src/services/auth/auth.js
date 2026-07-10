@@ -12,7 +12,8 @@ import crypto from "crypto";
 import { hashOTP } from "../../utils/hash.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-const normalizeEmail = (email) => email.trim().toLowerCase();
+
+import { normalizeEmail } from "../../utils/normalizeMail.js";
 
 async function googleAuthHandler(req, res) {
   // Get authorization header
@@ -46,6 +47,7 @@ async function googleAuthHandler(req, res) {
         email: payload.email,
         name: payload.name,
         picture: payload.picture,
+        provider: "google",
       });
     } else {
       user.lastLogin = new Date();
@@ -85,7 +87,6 @@ async function loginHandler(req, res) {
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid Password" });
     }
-
     return sendAuthResponse(res, user, 200, "Logged in !!");
   } catch (err) {
     console.error("Login error:", err);
@@ -116,6 +117,7 @@ async function registerHandler(req, res) {
       name,
       email,
       password: hashedPassword,
+      provider: "local",
     });
 
     await newUser.save();
@@ -269,6 +271,42 @@ async function verifyOTP(req, res) {
   }
 }
 
+async function updatePasswordHandler(req, res) {
+  try {
+    const userId = req.user.userId;
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: "Both passwords are required" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (user.provider !== "local") {
+      return res.status(403).json({
+        error: "Google SSO account cannot update details",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Incorrect current password" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    return res.status(200).json({ message: "Password updated successfully " });
+  } catch (err) {
+    console.log("Error updating the password", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 export {
   googleAuthHandler,
   loginHandler,
@@ -277,4 +315,5 @@ export {
   logoutHandler,
   forgotPasswordHandler,
   verifyOTP,
+  updatePasswordHandler,
 };

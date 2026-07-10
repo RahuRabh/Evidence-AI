@@ -7,11 +7,16 @@ export type AuthPayload = {
   password: string;
 };
 
+export type UpdatePasswordPayload = {
+  currentPassword: string;
+  newPassword: string;
+};
+
 export type OtpPayload = {
   email: string;
   otp: string;
   newPassword: string;
-}
+};
 
 export async function registerRequest(payload: AuthPayload) {
   const response = await api.post<AuthResponse>("/auth/register", payload, {
@@ -33,7 +38,7 @@ export async function refreshRequest() {
 }
 
 export async function sendOtpRequest(email: string) {
-  const response = await api.post("/auth/forgot-Password", {email});
+  const response = await api.post("/auth/forgot-Password", { email });
   return response.data;
 }
 
@@ -59,5 +64,10 @@ export async function googleAuth(idToken: string) {
       withCredentials: true,
     },
   );
+  return response.data;
+}
+
+export async function updatePasswordRequest(payload: UpdatePasswordPayload) {
+  const response = await api.put("/user/update-Password", payload);
   return response.data;
 }
