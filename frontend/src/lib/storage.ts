@@ -28,11 +28,27 @@ export function clearStoredToken() {
 
 export function getStoredUser(): User | null {
   const user = localStorage.getItem(USER_KEY);
-  return user ? JSON.parse(user) : null;
+
+  if (!user || user === "undefined") {
+    return null;
+  }
+
+  try {
+    return JSON.parse(user);
+  } catch (error) {
+    console.error("Failed to parse user from localStorage:", error);
+    localStorage.removeItem(USER_KEY);
+    
+    return null;
+  }
 }
 
 export function setStoredUser(user: User) {
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+  if (user) {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  } else {
+    localStorage.removeItem(USER_KEY);
+  }
 }
 
 export function clearStoredUser() {
