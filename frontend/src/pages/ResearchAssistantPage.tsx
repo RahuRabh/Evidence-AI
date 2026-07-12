@@ -5,7 +5,8 @@ import { AnswerSections } from "../components/chat/AnswerSections";
 import { QuestionForm } from "../components/chat/QuestionForm";
 import { Sidebar } from "../components/chat/Sidebar";
 import { useAuth } from "../features/auth/AuthProvider";
-import { AuthModal } from "../components/auth/AuthModal";
+// import { AuthModal } from "../components/auth/AuthModal";
+import { AuthModal } from "../features/auth/component/AuthModal";
 import { useChat } from "../features/chat/useChat";
 
 import { useSetting } from "../features/settings/context/useSetting";
@@ -134,7 +135,7 @@ export function ResearchAssistantPage() {
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <AuthModal
               open={isAuthModalOpen}
-              onClose={() => setIsAuthModalOpen(false)}
+              closeModal={() => setIsAuthModalOpen(false)}
             />
           </div>
         </div>

@@ -1,0 +1,67 @@
+/* Base Styles applied to EVERY button */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* --- VARIANTS --- */
+
+/* For Login, Register, Create Session */
+.primary {
+  background-color: #0f766e;
+  color: white;
+}
+.primary:hover:not(:disabled) {
+  background-color: #0f766e;
+}
+
+/* For secondary actions */
+.secondary {
+  background-color: #138e84;
+  color: #d1d5db;
+  border-color: #d1d5db;
+}
+.secondary:hover:not(:disabled) {
+  background-color: #0f766e;
+}
+
+/* For 'X' close buttons or icon-only buttons */
+.ghost {
+  position: absolute;
+  background-color: transparent;
+  color: #0f766e;
+}
+.ghost:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+/* --- SIZES --- */
+.sm {
+  padding: 0.5rem;
+  font-size: small;
+}
+
+.md {
+  padding: 0.375rem 0.75rem;
+  font-size: medium;
+}
+
+/* Specifically for square icon buttons like the 'X' modal closer */
+.icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.3rem;
+}

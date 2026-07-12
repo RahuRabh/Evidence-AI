@@ -49,7 +49,6 @@ export function Sidebar({
       >
         <div className="sidebar-mobile-header">
           <div className="brand-block">
-            <p className="eyebrow">CuraLink</p>
             <h1>AI Medical Research Assistant</h1>
           </div>
 

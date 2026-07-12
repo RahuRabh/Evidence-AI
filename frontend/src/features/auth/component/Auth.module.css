@@ -1,0 +1,79 @@
+.authModal {
+  position: relative;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  border: 1px solid #ececec;
+}
+
+.authHeader {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.eyebrow {
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #9a4f22;
+  margin: 0%;
+}
+
+.para {
+  color: #64748b;
+  line-height: 1.5;
+  padding: 0 35px;
+  font-weight: 400;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.xButton {
+  top: 1.8rem;
+  right: 1rem;
+}
+
+.authButtons {
+  width: 10rem;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: col;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0.5rem;
+}
+
+.buttonGroup p {
+  text-decoration: underline;
+  font-size: small;
+  margin-left: 0.25rem;
+}
+
+.authDivider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 0;
+  color: #94a3b8;
+}
+
+.authDivider::before,
+.authDivider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.formError {
+  margin: 0.5rem 0 0 0.5rem;
+  padding: 0 0.25rem;
+  color: #b91c1c;
+  font-size: 0.82rem;
+}

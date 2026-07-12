@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { googleAuth } from "../../api/auth";
-import { useAuth } from "../../features/auth/AuthProvider";
-import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 import { toast } from "sonner";
+import { useState } from "react";
+
+import { useAuth } from "../AuthProvider";
+
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 
 type GoogleLoginButtonProps = {
   onClose: () => void;
@@ -10,6 +11,7 @@ type GoogleLoginButtonProps = {
 
 export function GoogleLoginButton({ onClose }: GoogleLoginButtonProps) {
   const { loginWithGoogle } = useAuth();
+
   const [isPending, setIsPending] = useState(false);
   const [googleError, setGoogleError] = useState<string | null>(null);
 
@@ -21,13 +23,10 @@ export function GoogleLoginButton({ onClose }: GoogleLoginButtonProps) {
       setIsPending(true);
       setGoogleError(null);
 
-      const res = await googleAuth(idToken);
+      await loginWithGoogle(idToken);
 
-      if (res && res.token && res.user) {
-        loginWithGoogle(res.token, res.user);
-        toast.success("Logged in with Google.");
-        onClose();
-      }
+      toast.success("Logged in with Google.");
+      onClose();
     } catch (error) {
       console.error("Google Auth Error:", error);
       setGoogleError("Google login failed. Please try again.");

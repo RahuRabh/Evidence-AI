@@ -7,6 +7,8 @@ type InputFieldProps = {
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;
+  maxLength?: number;
+  minLength?: number;
   onChange: (value: string) => void;
   helperText?: string;
   rightElement?: React.ReactNode;
@@ -16,6 +18,8 @@ export function InputField({
   type,
   label,
   value,
+  maxLength,
+  minLength,
   helperText = "",
   placeholder = "",
   required = false,
@@ -34,6 +38,8 @@ export function InputField({
           placeholder={placeholder}
           disabled={disabled}
           required={required}
+          maxLength={maxLength}
+          minLength={minLength}
           className={`${styles.input} ${rightElement ? styles.hasRightElement : ""}`}
         />
         {rightElement && (

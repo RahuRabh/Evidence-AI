@@ -3,6 +3,7 @@ import type { AuthResponse, user as User } from "../../types/auth";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import {
+  googleAuth,
   loginRequest,
   logoutRequest,
   refreshRequest,
@@ -28,7 +29,7 @@ type AuthContextValue = {
   isAuthenticated: boolean;
   isBootstrapping: boolean;
   login: (email: string, password: string) => Promise<AuthResponse>;
-  loginWithGoogle: (token: string, user: User) => void;
+  loginWithGoogle: (tokenId: string) => Promise<AuthResponse>;
   register: (
     name: string,
     email: string,
@@ -87,6 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isBootstrapping,
       async login(email, password) {
         const response = await loginRequest({ email, password });
+
         setToken(response.token);
         setUser(response.user);
         setStoredToken(response.token);
@@ -95,15 +97,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return response;
       },
 
-      loginWithGoogle(googleToken, googleUser) {
-        setToken(googleToken);
-        setUser(googleUser);
-        setStoredToken(googleToken);
-        setStoredUser(googleUser);
+      async loginWithGoogle(tokenId) {
+        const response = await googleAuth(tokenId);
+
+        setToken(response.token);
+        setUser(response.user);
+        setStoredToken(response.token);
+        setStoredUser(response.user);
+
+        return response;
       },
 
       async register(name, email, password) {
         const response = await registerRequest({ name, email, password });
+
         setToken(response.token);
         setUser(response.user);
         setStoredToken(response.token);
@@ -114,6 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       async updateProfile(payload: UpdateProfilePayload) {
         const response = await updateProfileRequest(payload);
+
         setUser(response.user);
         setStoredUser(response.user);
 
@@ -122,6 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       async updatePassword(payload: UpdatePasswordPayload) {
         const response = await updatePasswordRequest(payload);
+
         setToken(response.token);
         setStoredUser(response.token);
 
