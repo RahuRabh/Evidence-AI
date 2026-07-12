@@ -1,13 +1,15 @@
 import { toast } from "sonner";
 import { useState, FormEvent } from "react";
-import { AnswerSections } from "../components/chat/AnswerSections";
 
+import { AnswerSections } from "../components/chat/AnswerSections";
 import { QuestionForm } from "../components/chat/QuestionForm";
+
 import { Sidebar } from "../components/chat/Sidebar";
-import { useAuth } from "../features/auth/AuthProvider";
-// import { AuthModal } from "../components/auth/AuthModal";
-import { AuthModal } from "../features/auth/component/AuthModal";
+
 import { useChat } from "../features/chat/useChat";
+
+import { AuthModal } from "../features/auth/component/AuthModal";
+import { useAuth } from "../features/auth/AuthProvider";
 
 import { useSetting } from "../features/settings/context/useSetting";
 import { Profile } from "../features/settings/components/Profile"
