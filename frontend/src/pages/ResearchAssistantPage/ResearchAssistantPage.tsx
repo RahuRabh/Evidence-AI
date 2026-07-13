@@ -13,6 +13,9 @@ import { useSetting } from "@/features/settings/context/useSetting";
 import { Profile } from "@/features/settings/components/Profile/Profile";
 import { Security } from "@/features/settings/components/Security/Security";
 
+import styles from "./ResearchAssistantPage.module.css"
+import { Button } from "@/components/ui/button/Button";
+
 export function ResearchAssistantPage() {
   const auth = useAuth();
   const chat = useChat();
@@ -56,11 +59,10 @@ export function ResearchAssistantPage() {
   };
 
   return (
-    <main className="curalink-app">
+    <main className={styles.assistantApp}>
       <Sidebar
         sessions={chat.sessions}
         conversationId={chat.conversationId}
-        isHistoryLoading={chat.isHistoryLoading}
         isSidebarOpen={isSidebarOpen}
         onNewConversation={chat.resetChatState}
         onOpenSession={(id) => void handleOpenSession(id)}
@@ -68,34 +70,33 @@ export function ResearchAssistantPage() {
         loginModal={() => setIsAuthModalOpen(true)}
       />
 
-      <section className="research-workspace">
-        <section className="response-panel">
-          <button
-            className="sidebar-toggle-button"
-            type="button"
-            onClick={() => setIsSidebarOpen(true)}
-          >
-            ☰
-          </button>
+      <section className={styles.researchWorkspace}>
+        <section className={styles.responsePanel}>
+          
+          <Button
+          type="button"
+          size="icon"
+          onClick={() => setIsSidebarOpen(true)}
+          className={styles.sidebartoggleButton}
+          >☰</Button>
 
-          <div className="chat-window" aria-live="polite">
+          <div className={styles.chatWindow} aria-live="polite">
             {chat.messages.length === 0 ? (
-              <div className="empty-chat">
+              <div className={styles.emptyChat}>
                 <h2>Start a research session.</h2>
                 <p>Add a disease, query, and optional location below.</p>
               </div>
             ) : (
               chat.messages?.map((item) =>
                 item.role === "user" ? (
-                  <article className="chat-message user-message" key={item.id}>
+                  <article className={`${styles.chatMessage} ${styles.userMessage}`} key={item.id}>
                     <p>{item.content}</p>
                   </article>
                 ) : (
                   <article
-                    className="chat-message assistant-message"
+                    className={`${styles.chatMessage} ${styles.assistantMessage}`}
                     key={item.id}
                   >
-                    {/* <span>CuraLink</span> */}
                     <AnswerSections
                       answer={item.answer}
                       sources={item.sources}
@@ -108,7 +109,7 @@ export function ResearchAssistantPage() {
             )}
 
             {chat.isLoading ? (
-              <div className="loading-state">
+              <div className={styles.loadingState}>
                 <span />
                 Searching OpenAlex, PubMed, and ClinicalTrials.gov...
               </div>
@@ -129,10 +130,10 @@ export function ResearchAssistantPage() {
 
       {isAuthModalOpen && (
         <div
-          className="modal-overlay"
+          className={styles.modalOverlay}
           onClick={() => setIsAuthModalOpen(false)}
         >
-          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalContainer} onClick={(e) => e.stopPropagation()}>
             <AuthModal
               open={isAuthModalOpen}
               closeModal={() => setIsAuthModalOpen(false)}
@@ -142,7 +143,7 @@ export function ResearchAssistantPage() {
       )}
 
       {activeView && (
-        <section className="workspace-overlay">
+        <section className={styles.workspaceOverlay}>
           {activeView === "profile" && <Profile />}
           {activeView === "security" && <Security />}
           {activeView === "settings" && <Security />}

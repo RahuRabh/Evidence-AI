@@ -45,7 +45,7 @@
   color: #0f766e;
   border: none;
   cursor: pointer;
-  border-radius: 24px;
+  border-radius: 12px;
   transition: background-color 0.2s ease;
 }
 .ghost:hover:not(:disabled) {

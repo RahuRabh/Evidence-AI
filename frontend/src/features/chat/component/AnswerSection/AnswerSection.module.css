@@ -15,7 +15,7 @@
 .answerCard {
   background: #fff;
   border: 1px solid #dbe4e1;
-  border-radius: 18px;
+  border-radius: 12px;
   padding: 1rem 1.1rem;
 }
 
@@ -78,7 +78,7 @@
 .medicalDisclaimer {
   margin-top: 0px;
   padding: 10px;
-  border-radius: 16px;
+  border-radius: 12px;
   background: #fff7ed;
   border: 1px solid #fed7aa;
   color: #9a3412;

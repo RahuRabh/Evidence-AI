@@ -5,7 +5,7 @@
 .researchDetails {
   margin-top: 0.5rem;
   border: 1px solid #e5e7eb;
-  border-radius: 18px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.75);
   overflow: hidden;
 }

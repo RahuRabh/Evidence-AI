@@ -14,7 +14,6 @@ import styles from "./Sidebar.module.css";
 type SidebarProps = {
   sessions: ChatSessionSummary[];
   conversationId: string | null;
-  isHistoryLoading: boolean;
   isSidebarOpen: boolean;
   onCloseSidebar: () => void;
   onNewConversation: () => void;
@@ -25,7 +24,6 @@ type SidebarProps = {
 export function Sidebar({
   sessions,
   conversationId,
-  isHistoryLoading,
   isSidebarOpen,
   onCloseSidebar,
   onNewConversation,
@@ -82,7 +80,7 @@ export function Sidebar({
                     onOpenSession(session.id);
                     onCloseSidebar();
                   }}
-                  className={`{styles.historyItem} ${session.id === conversationId ? styles.active : "styles.inactive"}`}
+                  className={`${session.id === conversationId ? styles.active : "styles.inactive"}`}
                 />
               ))
             ) : (

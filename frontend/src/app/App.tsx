@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import { ResearchAssistantPage } from "../pages/ResearchAssistantPage";
+import { ResearchAssistantPage } from "../pages/ResearchAssistantPage/ResearchAssistantPage";
 
 import "../styles/global.css";
 

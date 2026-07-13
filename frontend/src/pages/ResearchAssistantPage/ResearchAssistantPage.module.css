@@ -1,0 +1,154 @@
+.assistantApp {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.researchWorkspace {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.responsePanel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebartoggleButton,
+.sidebarcloseButton {
+  display: none;
+}
+
+.chatWindow {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0%;
+  padding: 40px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.emptyChat {
+  width: 100%;
+  max-width: 760px;
+  margin: auto;
+}
+
+.emptyChat h2 {
+  margin: 0;
+  color: #111827;
+}
+
+.chatMessage {
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatMessage > span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.userMessage {
+  align-self: center;
+}
+
+.userMessage p {
+  margin: 0;
+  width: fit-content;
+  max-width: min(780px, 85%);
+  margin-left: auto;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: #0f766e;
+  color: #fff;
+}
+
+.assistantMessage {
+  align-self: center;
+  width: 100%;
+  max-width: 980px;
+}
+
+.loadingState {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #6b7280;
+  padding: 0.5rem 0;
+}
+
+.loadingState span {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #d1d5db;
+  border-top-color: #0f766e;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.modalOverlay,
+.workspaceOverlay {
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.55);
+    backdrop-filter:blur(8px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    animation:fadeIn .2s ease;
+}
+
+.modalContainer {
+    width:100%;
+    max-width:440px;
+    margin:20px;
+    animation:scaleIn .22s ease;
+}
+
+@media (max-width: 860px) {
+  .assistantApp {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebartoggleButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    width: 42px;
+    height: 42px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background: transparent;
+    color: #fff;
+    z-index: 25;
+  }
+
+  .chatWindow {
+    padding: 1rem 1rem 9rem;
+  }
+
+  .chatMessage,
+  .assistantMessage {
+    max-width: 100%;
+  }
+
+  .userMessage p {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+}

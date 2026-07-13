@@ -12,7 +12,7 @@
   transition: background-color 0.2s ease, color 0.2s ease;
   text-align: left;
   gap: 12px;
-  border-radius: 24px;
+  border-radius: 12px;
 }
 
 .popoverItem:disabled {
