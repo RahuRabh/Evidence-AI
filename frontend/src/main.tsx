@@ -8,8 +8,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App } from "./app/App";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { AuthProvider } from "./features/auth/AuthProvider";
-import { ChatProvider } from "./features/chat/ChatProvider";
+import { AuthProvider } from "./features/auth/context/AuthProvider";
+import { ChatProvider } from "./features/chat/context/ChatProvider";
 import { SettingsProvider } from "./features/settings/context/SettingsProvider";
 
 const queryClient = new QueryClient();
@@ -21,9 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <AuthProvider>
           <SettingsProvider>
             <ChatProvider>
-              <GoogleOAuthProvider
-                clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-              >
+              <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
                 <App />
                 <Toaster richColors position="top-right" />
               </GoogleOAuthProvider>

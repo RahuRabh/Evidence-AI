@@ -1,0 +1,107 @@
+.sourceCard {
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.sourceCard:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.trialCard {
+  color: #15803d;
+  background: #dcfce7;
+  border: 1px solid #d9e8fc;
+}
+
+.publicationCard {
+  color:#2f84f2;
+  background: #d9e8fc;
+  border: 1px solid #dcfce7;
+}
+
+.sourceCardTop {
+  display: flex;
+  margin: 0%;
+  padding: 0%;
+  justify-content: space-between;
+}
+
+.sourcePlatformBadge {
+  font-size: 12px;
+  font-weight: 900;
+  border: 1px solid white;
+  padding: 2px 3px;
+  color: #111827;
+  border-radius: 10px;
+}
+
+.sourceAuthorDate {
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.title {
+  font-size: larger;
+  line-height: 20px;
+  margin: 15px 0px;
+  width: 100%;
+  font-weight: 700;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sourceSnippet {
+  margin: 0;
+  color: #4b5563;
+  font-size: small;
+  line-height: 1.4;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  min-height: 10px;
+}
+
+.sourceCardFooter {
+  margin-top: 7px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sourceScore {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.08);
+  color: #111827;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.sourceLink {
+  font-size: 10px;
+  font-weight: 900;
+  color: #111827;
+  text-decoration: none;
+}
+
+.sourceLink:hover {
+  text-decoration: underline;
+}

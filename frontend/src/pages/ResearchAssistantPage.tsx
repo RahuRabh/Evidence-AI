@@ -1,19 +1,17 @@
 import { toast } from "sonner";
 import { useState, FormEvent } from "react";
 
-import { AnswerSections } from "../components/chat/AnswerSections";
-import { QuestionForm } from "../components/chat/QuestionForm";
+import { useChat } from "@/features/chat/context/useChat";
+import { Sidebar } from "@/features/chat/component/Sidebar/Sidebar";
+import { QuestionForm } from "@/features/chat/component/QuestionForm/QuestionForm";
+import { AnswerSections } from "@/features/chat/component/AnswerSection/AnswerSection";
 
-import { Sidebar } from "../components/chat/Sidebar";
+import { useAuth } from "@/features/auth/context/useAuth";
+import { AuthModal } from "@/features/auth/component/AuthModal/AuthModal";
 
-import { useChat } from "../features/chat/useChat";
-
-import { AuthModal } from "../features/auth/component/AuthModal";
-import { useAuth } from "../features/auth/AuthProvider";
-
-import { useSetting } from "../features/settings/context/useSetting";
-import { Profile } from "../features/settings/components/Profile"
-import { Security } from "../features/settings/components/Security";
+import { useSetting } from "@/features/settings/context/useSetting";
+import { Profile } from "@/features/settings/components/Profile/Profile";
+import { Security } from "@/features/settings/components/Security/Security";
 
 export function ResearchAssistantPage() {
   const auth = useAuth();

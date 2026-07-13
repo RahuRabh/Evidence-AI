@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import { ResearchAssistantPage } from "../pages/ResearchAssistantPage";
+
 import "../styles/global.css";
 
 export function App() {

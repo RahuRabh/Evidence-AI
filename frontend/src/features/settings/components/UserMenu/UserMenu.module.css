@@ -1,0 +1,57 @@
+.popoverContainer {
+  width: 280px;
+  background-color: #ffffff;
+  border-radius: 24px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  color: #1f1f1f;
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  z-index: 100;
+}
+
+.popoverHeader {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 16px 20px;
+  overflow: hidden;
+  gap: 6px;
+}
+
+.popoverName,
+.popoverEmail {
+  margin: 0%;
+  padding: 0%;
+  font-size: 16px;
+  font-weight: 500;
+  color: #444746;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.xButton {
+  top: 0.5rem;
+  right: 0.1rem;
+}
+
+.popoverDivider {
+  height: 1px;
+  background-color: #e3e3e3;
+  width:90%;
+  margin-left: 5%;
+}
+
+.popoverMenu {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px;
+  background: white;
+  border-radius: 12px;
+}

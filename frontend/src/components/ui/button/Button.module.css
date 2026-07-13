@@ -43,6 +43,10 @@
   position: absolute;
   background-color: transparent;
   color: #0f766e;
+  border: none;
+  cursor: pointer;
+  border-radius: 24px;
+  transition: background-color 0.2s ease;
 }
 .ghost:hover:not(:disabled) {
   background-color: #f3f4f6;
@@ -55,8 +59,13 @@
 }
 
 .md {
-  padding: 0.375rem 0.75rem;
+  padding: 1rem;
   font-size: medium;
+}
+
+.lg {
+  padding: 1.5rem;
+  font-size: large;
 }
 
 /* Specifically for square icon buttons like the 'X' modal closer */

@@ -1,0 +1,8 @@
+.container {
+  transition: opacity 0.2s ease-in-out; 
+}
+
+.pending {
+  opacity: 0.6;
+  pointer-events: none;
+}
