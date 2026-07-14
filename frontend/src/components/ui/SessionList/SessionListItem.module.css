@@ -1,0 +1,56 @@
+.sessionItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 6px;
+  border-radius: 8px;
+  background: transparent;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.sessionItem:hover,
+.sessionItem.active {
+  background-color: #f3f4f6;
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  text-align: left;
+  
+/* 1. THE OVERLAP & TRUNCATION FIX */
+  display: block; 
+  flex: 1 1 auto; /* Allow it to grow and shrink */
+  min-width: 0;   /* CRITICAL: This tells flexbox it is allowed to crush the text */
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Adds the "..." */
+}
+
+/* Hide the delete button by default */
+.deleteButton {
+  position: relative; 
+  
+  flex: 0 0 28px; 
+  width: 18px;
+  height: 18px;
+  
+  /* ... your existing opacity and color rules ... */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.sessionItem.active .deleteButton {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.deleteButton:hover {
+  background-color: #fee2e2; 
+}

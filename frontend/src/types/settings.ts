@@ -1,5 +1,5 @@
 export type SettingResponse = {
     name?: string;
-    picture?: string;
+    image?: string;
     newPassword?: string;
 }

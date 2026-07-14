@@ -5,6 +5,7 @@ import { useAuth } from "@/features/auth/context/useAuth";
 import { useSetting } from "@/features/settings/context/useSetting";
 
 import { Button } from "@/components/ui/button/Button";
+import { Avatar } from "@/components/ui/Avatar/Avatar";
 import { InputField } from "@/components/ui/InputField/InputField";
 
 import styles from "./Profile.module.css";
@@ -14,7 +15,7 @@ export function Profile() {
   const { closeView } = useSetting();
 
   const [name, setName] = useState(user?.name || "");
-  const [previewImage, setPreviewImage] = useState(user?.picture || "");
+  const [previewImage, setPreviewImage] = useState(user?.image || "");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [error, setError] = useState("");
@@ -74,16 +75,7 @@ export function Profile() {
       </Button>
 
       <div className={styles.avatarSection}>
-        <img
-          src={previewImage}
-          alt={name || "user profile"}
-          className={styles.avatarPreview}
-          referrerPolicy="no-referrer"
-          crossOrigin="anonymous"
-          onError={(e) => {
-            e.currentTarget.style.display = "none";
-          }}
-        />
+        <Avatar src={previewImage} name={name || "user profile"} size="xl" />
 
         <input
           type="file"

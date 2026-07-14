@@ -39,3 +39,9 @@ export async function getChatSession(sessionId: string) {
 
   return response.data;
 }
+
+export async function deleteMessageById(conversationId: string | null) {
+  const response = await api.delete(`/chat/conversation/${conversationId}`);
+
+  return response.data;
+}

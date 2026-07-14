@@ -35,7 +35,7 @@ export function sendAuthResponse(
       id: user._id,
       email: user.email,
       name: user.name,
-      picture: user.picture,
+      image: user.image,
       role: user.role,
     },
   };

@@ -249,3 +249,27 @@ export async function getChatSession(conversationId, userId) {
     messages,
   };
 }
+
+export async function deleteChatMessage(conversationId, userId) {
+
+  if (!Types.ObjectId.isValid(conversationId)) {
+    throw new AppError("Invalid conversation ID", 400);
+  }
+
+  const conversation = await Conversation.findOne({
+    _id: conversationId,
+    userId: userId,
+  }).lean();
+
+  if (!conversation) {
+    throw new AppError("Unauthorized: You do not own this conversation", 403);
+  }
+  
+  await Conversation.findByIdAndDelete(conversationId);
+  await Message.deleteMany({ conversationId: conversationId });
+  
+  return { 
+    success: true,
+    conversationId: conversationId 
+  };
+}

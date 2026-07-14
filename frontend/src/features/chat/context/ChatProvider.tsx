@@ -3,9 +3,18 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 
 import { makeId, mapStoredMessagesToChatMessages } from "./chatHelpers";
 
-import { getChatSession, getChatSessions, sendChatMessage } from "@/api/chat"
+import {
+  deleteMessageById,
+  getChatSession,
+  getChatSessions,
+  sendChatMessage,
+} from "@/api/chat";
 
-import type { ChatMessage, ChatSessionSummary, StructuredContext } from "@/types/chat"
+import type {
+  ChatMessage,
+  ChatSessionSummary,
+  StructuredContext,
+} from "@/types/chat";
 
 export type ChatContextType = {
   conversationId: string | null;
@@ -21,6 +30,7 @@ export type ChatContextType = {
   refreshSessions: () => Promise<void>;
   openSession: (sessionId: string) => Promise<void>;
   sendMessage: (textContent: string) => Promise<void>;
+  deleteMessage: (messageId: string | null) => Promise<void>;
 };
 
 export const ChatContext = createContext<ChatContextType | null>(null);
@@ -41,7 +51,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
   const [sessions, setSessions] = useState<ChatSessionSummary[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [structuredContext, setStructuredContext] = useState<StructuredContext>(emptyContext);
+  const [structuredContext, setStructuredContext] =
+    useState<StructuredContext>(emptyContext);
 
   const refreshSessions = async () => {
     if (!auth.isAuthenticated) {
@@ -137,8 +148,25 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       await refreshSessions();
     } catch (requestError) {
       console.error(requestError);
-      setError("The assistant could not respond. Please verify your connection setup.");
+      setError(
+        "The assistant could not respond. Please verify your connection setup.",
+      );
       throw requestError;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const deleteMessage = async (messageId: typeof conversationId) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      await deleteMessageById(messageId);
+      setMessages((current) => current.filter((msg) => msg.id !== messageId));
+      await refreshSessions();
+    } catch (requestError) {
+      console.error("Failed to delete message", requestError);
+      setError("Could not delete the message. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -160,6 +188,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         refreshSessions,
         openSession,
         sendMessage,
+        deleteMessage,
       }}
     >
       {children}

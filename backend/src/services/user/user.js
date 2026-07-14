@@ -1,5 +1,7 @@
 import { User } from "../../models/user.js";
 
+import { uploadBufferToCloudinary } from "../../utils/cloudinary.js"
+
 export async function updateProfileHandler(req, res) {
   try {
     const userId = req.user.userId;
@@ -17,8 +19,12 @@ export async function updateProfileHandler(req, res) {
       });
     }
 
+    if (file) {
+      const cloudResult = await uploadBufferToCloudinary(file.buffer);
+      user.image = cloudResult.secure_url;
+    }
+
     if (name) user.name = name;
-    if (file) console.log("Recieved a image file", file.originalname);
 
     await user.save();
     return res.status(200).json({

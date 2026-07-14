@@ -3,8 +3,8 @@
 }
 
 .visible {
-    opacity: 1;
-    pointer-events: auto;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .sessionSidebar {
@@ -26,22 +26,20 @@
 }
 
 .sidebarMobileHeader h1 {
-  margin: 0;
-  font-size: 18px;
-  line-height: 20px;
-  font-weight: 800;
-  text-transform: uppercase;
-  color: #9a4f22;
   margin: 0%;
-  padding: 20px 0px;
+  padding-bottom: 10px;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 20px;
+  color: #9a4f22;
+  text-transform: uppercase;
   border-bottom: 1px solid #e5e7eb;
 }
 
 .xButton {
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
-  padding-top: 35px;
 }
 
 .historySection {
@@ -87,12 +85,6 @@
   font-size: medium;
 }
 
-.userInfo img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-}
-
 @media (max-width: 860px) {
   .sidebarOverlay {
     display: block;
@@ -103,7 +95,7 @@
     pointer-events: none;
     transition: opacity 0.2s ease;
     z-index: 40;
-    cursor : pointer;
+    cursor: pointer;
   }
 
   .visible {
@@ -123,9 +115,10 @@
   .sidebarOpen {
     transform: translateX(0);
   }
+}
 
+@media (min-width: 861px) {
   .xButton {
-    top: 10px;
-    right: 10px;
+    display: none;
   }
 }

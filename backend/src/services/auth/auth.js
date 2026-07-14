@@ -40,13 +40,13 @@ async function googleAuthHandler(req, res) {
 
     // find or create the user
     let user = await User.findOne({ googleId: payload.sub });
-
+    
     if (!user) {
       user = await User.create({
         googleId: payload.sub,
         email: payload.email,
         name: payload.name,
-        picture: payload.picture,
+        image: payload.picture,
         provider: "google",
       });
     } else {
