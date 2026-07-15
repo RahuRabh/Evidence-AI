@@ -1,6 +1,6 @@
-# CuraLink – AI Medical Research Assistant
+# Assistant AI – Medical Research Platform
 
-CuraLink is a Retrieval-Augmented Generation (RAG) medical research assistant that retrieves evidence from trusted biomedical sources, ranks the most relevant publications and clinical trials, and then generates a grounded answer using an open-source LLM.
+Assistant AI is a Retrieval-Augmented Generation (RAG) medical research assistant that retrieves evidence from trusted biomedical sources, ranks the most relevant publications and clinical trials, and then generates a grounded answer using an open-source LLM.
 
 The assistant does not answer directly from model memory. Instead, every response is grounded in retrieved medical evidence.
 
