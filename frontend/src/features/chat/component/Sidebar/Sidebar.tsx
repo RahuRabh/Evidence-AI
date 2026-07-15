@@ -58,7 +58,7 @@ export function Sidebar({
           >
             x
           </Button>
-          <h1>AI Medical Research Assistant</h1>
+          <h1>Evidence AI - Medical Research Platform</h1>
         </div>
 
         <Button
