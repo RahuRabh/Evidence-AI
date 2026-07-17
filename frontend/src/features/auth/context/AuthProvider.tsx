@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 
 import type { AuthResponse, user as User } from "@/types/auth"
 
