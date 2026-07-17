@@ -18,12 +18,23 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  max-width: 980px;
 }
 
 .contextFields {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.75rem;
+}
+
+.contextFields .field input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 12px;
+  background: #ffffff;
+  transition: all 0.15s ease;
 }
 
 .field input:focus,
@@ -52,8 +63,8 @@
   border: 0;
   background: transparent;
   padding: 0.15rem 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 15px;
   color: #111827;
 }
 
@@ -66,7 +77,25 @@
 }
 
 .askButton {
-  width: 60px;
+  min-width: 60px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.askButton:hover {
+  background: #1d4ed8;
+}
+
+.askButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
 }
 
 .formError {
@@ -78,14 +107,59 @@
 
 @media (max-width: 860px) {
   .contextFields {
-    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
 
   .messageRow textarea {
-    flex: 1;
-    min-height: 80px;
-    max-height: 140px;
+    min-height: 50px;
+    max-height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .questionPalette {
+    padding: 10px;
+  }
+
+  .questionPaletteInner {
+    gap: 8px;
+  }
+
+  .contextFields {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .contextFields .field input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .messageRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .messageRow textarea {
+    min-height: 60px;
+    font-size: 13px;
+    line-height: 17px;
+    width: 100%;
+  }
+
+  .askButton {
+    align-self: flex-end;
+    width: auto;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .formError {
+    font-size: 0.75rem;
+    padding: 0;
   }
 }

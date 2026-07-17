@@ -39,6 +39,9 @@ type AuthContextValue = {
   updateProfile: (payload: UpdateProfilePayload) => Promise<AuthResponse>;
   updatePassword: (payload: UpdatePasswordPayload) => Promise<void>;
   logout: () => Promise<void>;
+  isAuthModalOpen: boolean;
+  openAuthModal: () => void;
+  closeAuthModal: () => void;
 };
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -47,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => getStoredToken());
   const [user, setUser] = useState<User | null>(() => getStoredUser());
   const [isBootstrapping, setIsBootstrapping] = useState(true);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
     async function bootstrap() {
@@ -87,6 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       isAuthenticated: Boolean(token && user),
       isBootstrapping,
+      isAuthModalOpen,
       async login(email, password) {
         const response = await loginRequest({ email, password });
 
@@ -150,17 +155,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(null);
         }
       },
+
+      openAuthModal : () => setIsAuthModalOpen(true),
+      closeAuthModal : () => setIsAuthModalOpen(false),
+
     }),
-    [token, isBootstrapping, user],
+    [token, isBootstrapping, user, isAuthModalOpen],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return ctx;
-};

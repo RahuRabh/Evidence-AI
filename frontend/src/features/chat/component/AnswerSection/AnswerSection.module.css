@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  position: relative;
 }
 
 .mutedText {
@@ -13,45 +14,42 @@
 }
 
 .answerCard {
-  background: #fff;
   border: 1px solid #dbe4e1;
   border-radius: 12px;
-  padding: 1rem 1.1rem;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.75);
 }
 
-.answercardLabel {
+.answerLabel {
   display: inline-flex;
   align-items: center;
-  margin: 0 0 0.85rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 999px;
+  margin: 0px 0px 5px 0px;
+  padding: 5px 10px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #eef2ff, #e0f2fe);
   color: #1e3a8a;
-  font-size: 0.7rem;
+  font-size: 12px;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   box-shadow: inset 0 0 0 1px rgba(64, 85, 120, 0.12);
 }
 
-.answerCard h3 {
-  margin: 0 0 0.75rem;
-  font-size: 0.95rem;
+.answerTakeaway {
+  margin: 3px 0px 0px 0px;
+  font-size: 12px;
   color: #111827;
-}
-
-.answerCard p {
-  margin: 0;
-  color: #4b5563;
+  line-height: 18px;
+  line-break: auto;
 }
 
 .answerInsights {
   margin: 0;
-  padding-left: 1.2rem;
+  padding: 0%;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  color: #4b5563;
+  padding-left: 20px;
+  gap: 3px;
 }
 
 .inlineEvidence {
@@ -83,4 +81,113 @@
   border: 1px solid #fed7aa;
   color: #9a3412;
   font-size: 12px;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  --c: no-repeat linear-gradient(#fb6507 0 0);
+  background:
+    var(--c) center/100% 10px,
+    var(--c) center/10px 100%;
+}
+
+.loader:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    var(--c) 0 0,
+    var(--c) 100% 0,
+    var(--c) 0 100%,
+    var(--c) 100% 100%;
+  background-size: 15.5px 15.5px;
+  animation: l16 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+}
+
+@keyframes l16 {
+  33% {
+    inset: -4px;
+    transform: rotate(0deg);
+  }
+  66% {
+    inset: -4px;
+    transform: rotate(90deg);
+  }
+  100% {
+    inset: 0;
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .answerSections {
+    gap: 0.75rem;
+  }
+
+  .answerCard {
+    padding: 12px;
+  }
+
+  .inlineEvidenceHeading {
+    font-size: 16px;
+  }
+
+  .sourceCardGrid {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .answerCard {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .mutedText {
+    font-size: 0.8rem;
+  }
+
+  .answerLabel {
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
+
+  .answerTakeaway {
+    font-size: 13px;
+    line-height: 19px;
+  }
+
+  .answerInsights {
+    padding-left: 15px;
+    gap: 5px;
+  }
+
+  .inlineEvidence {
+    gap: 12px;
+    margin-top: 5px;
+  }
+
+  .inlineEvidenceHeading {
+    font-size: 14px;
+    margin-left: 0px;
+    margin-bottom: 2px;
+  }
+
+  .sourceCardGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .medicalDisclaimer {
+    padding: 8px;
+    font-size: 11px;
+    line-height: 16px;
+    border-radius: 8px;
+  }
 }

@@ -46,14 +46,14 @@ export function UserMenu({ onClose }: UserMenuProps) {
           onClick={() => openView("profile")}
         />
 
-        <MenuItem
+        {/* <MenuItem
           icon="⚙️"
           label="Settings"
           variant="default"
           onClick={() => {
             openView("security");
           }}
-        />
+        /> */}
 
         <MenuItem
           icon="🔑"

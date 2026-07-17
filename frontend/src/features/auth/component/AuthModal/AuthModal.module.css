@@ -5,11 +5,15 @@
   padding: 32px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
   border: 1px solid #ececec;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
 }
 
 .authHeader {
   text-align: center;
   padding: 0.5rem;
+  position: relative;
 }
 
 .eyebrow {
@@ -17,37 +21,50 @@
   font-weight: 800;
   text-transform: uppercase;
   color: #9a4f22;
-  margin: 0%;
+  margin: 0 0 8px 0;
 }
 
 .xButton {
-  top: 1.8rem;
-  right: 1rem;
+  top: -0.2rem;
+  right: -0.9rem;
 }
 
 .para {
   color: #64748b;
   line-height: 1.5;
-  padding: 0 35px;
+  padding: 0 20px;
   font-weight: 400;
+  font-size: 14px;
+  margin: 8px 0 0 0;
+}
+
+.modalFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
 }
 
 .buttonGroup {
   display: flex;
-  flex-direction: col;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 0.5rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 8px;
+  margin: 0.5rem 0;
 }
 
 .buttonGroup p {
-  text-decoration: underline;
-  font-size: small;
-  margin-left: 0.25rem;
+  font-size: 13px;
+  margin: 0;
+  color: #475569;
 }
 
 .authButtons {
   width: 10rem;
+  height: 40px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .authDivider {
@@ -56,6 +73,8 @@
   gap: 10px;
   margin: 12px 0 0;
   color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .authDivider::before,
@@ -64,4 +83,31 @@
   flex: 1;
   height: 1px;
   background: #e5e7eb;
+}
+
+@media (max-width: 480px) {
+  .authModal {
+    padding: 24px 16px;
+    border-radius: 8px;
+  }
+
+  .eyebrow {
+    font-size: 14px;
+    padding-right: 24px;
+  }
+
+  .para {
+    padding: 0;
+    font-size: 13px;
+  }
+
+  .buttonGroup {
+    align-items: center;
+    text-align: center;
+  }
+
+  .authButtons {
+    width: 100% !important;
+    height: 46px;
+  }
 }

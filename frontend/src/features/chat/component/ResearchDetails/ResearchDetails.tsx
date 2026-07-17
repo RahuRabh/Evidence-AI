@@ -15,10 +15,10 @@ export function ResearchDetails({ metadata }: ResearchDetailsProps) {
     <div className={styles.researchDetails}>
       <button
         type="button"
-        className={`{styles.researchDetailsToggle} ${isOpen ? "open" : ""}`}
+        className={`${styles.researchDetailsToggle} ${isOpen ? styles.open : ""}`}
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span className={styles.researchDetailsLabel}>Research details</span>
+        <span className={styles.researchLabel}>Research details</span>
 
         <span className={styles.chevron}>{isOpen ? "▲" : "▼"}</span>
       </button>

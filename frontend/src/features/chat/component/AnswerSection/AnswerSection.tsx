@@ -28,20 +28,20 @@ export function AnswerSections({
   return (
     <div className={styles.answerSections}>
       {isHistoryLoading ? (
-        <p className={styles.mutedText}>Loading session...</p>
+        <div className={styles.loader}></div>
       ) : null}
 
       <div className={styles.answerCard}>
-        <p className={styles.answercardLabel}>Condition overview</p>
-        <p>{answer.conditionOverview}</p>
+        <p className={styles.answerLabel}>Condition overview</p>
+        <p className={styles.answerTakeaway}>{answer.conditionOverview}</p>
       </div>
 
       {(answer.researchInsights ?? []).length > 0 && (
         <div className={styles.answerCard}>
-          <p className={styles.answercardLabel}>Research insights</p>
+          <p className={styles.answerLabel}>Research insights</p>
           <ul className={styles.answerInsights}>
             {answer.researchInsights.map((insight) => (
-              <li key={insight}>{insight}</li>
+              <li className={styles.answerTakeaway} key={insight}>{insight}</li>
             ))}
           </ul>
         </div>
@@ -49,8 +49,8 @@ export function AnswerSections({
 
       {answer.personalizedTakeaway && (
         <div className={styles.answerCard}>
-          <p className={styles.answercardLabel}>Personalized takeaway</p>
-          <p>{answer.personalizedTakeaway}</p>
+          <p className={styles.answerLabel}>Personalized takeaway</p>
+          <p className={styles.answerTakeaway}>{answer.personalizedTakeaway}</p>
         </div>
       )}
 

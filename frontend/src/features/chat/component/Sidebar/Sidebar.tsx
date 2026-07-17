@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { ChatSessionSummary } from "@/types/chat";
 
-import { useAuth } from "@/features/auth/context/AuthProvider";
+import { useAuth } from "@/features/auth/context/useAuth";
 import { useChat } from "../../context/useChat";
 
 import { Button } from "@/components/ui/button/Button";
@@ -21,7 +21,6 @@ type SidebarProps = {
   onCloseSidebar: () => void;
   onNewConversation: () => void;
   onOpenSession: (sessionId: string) => void;
-  loginModal: () => void;
 };
 
 export function Sidebar({
@@ -31,13 +30,17 @@ export function Sidebar({
   onCloseSidebar,
   onNewConversation,
   onOpenSession,
-  loginModal,
 }: SidebarProps) {
   const { deleteMessage } = useChat();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, openAuthModal } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
 
-  const toggleUserMenu = () => setShowUserMenu((prev) => !prev);
+  useEffect(() => {
+    if (isAuthenticated) {
+      setShowUserMenu(false);
+    }
+  }, [isAuthenticated]);
+
   return (
     <>
       <div
@@ -73,7 +76,11 @@ export function Sidebar({
         <section className={styles.historySection}>
           <h2>Chat History</h2>
 
-          {sessions.length > 0 ? (
+          {!isAuthenticated ? (
+            <p className={styles.mutedText}>
+              Your saved research sessions will appear here.
+            </p>
+          ) : sessions.length > 0 ? (
             sessions.map((session) => (
               <SessionListItem
                 key={session.id}
@@ -95,26 +102,37 @@ export function Sidebar({
             ))
           ) : (
             <p className={styles.mutedText}>
-              Your saved research sessions will appear here.
+              ✨ Get started with your medical research work!
             </p>
           )}
         </section>
 
         {isAuthenticated ? (
-          <div onClick={toggleUserMenu} className={styles.userInfo}>
-            {showUserMenu && (
-              <UserMenu onClose={() => setShowUserMenu(false)} />
-            )}
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowUserMenu((prev) => !prev);
+            }}
+            className={styles.userInfo}
+          >
             <p>{getInitials(user?.name)}</p>
-
             <Avatar src={user?.image} name={user?.name} size="md" />
+
+            {showUserMenu && (
+              <div onClick={(e) => e.stopPropagation()}>
+                <UserMenu onClose={() => setShowUserMenu(false)} />
+              </div>
+            )}
           </div>
         ) : (
           <Button
             type="button"
             variant="primary"
             size="sm"
-            onClick={loginModal}
+            onClick={(e) => {
+              e.stopPropagation();
+              openAuthModal();
+            }}
           >
             Log In
           </Button>

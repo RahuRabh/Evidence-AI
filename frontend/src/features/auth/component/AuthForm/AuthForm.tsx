@@ -3,17 +3,17 @@ import { toast } from "sonner";
 import { useState } from "react";
 import type { FormEvent } from "react";
 
-import { useAuth } from "@/features/auth/context/useAuth"
+import { useAuth } from "@/features/auth/context/useAuth";
 
-import type { AuthMode } from "@/features/auth/component/AuthModal/AuthModal"
+import type { AuthMode } from "@/features/auth/component/AuthModal/AuthModal";
 
-import { Button } from "@/components/ui/button/Button"
-import { InputField } from "@/components/ui/InputField/InputField"
-import { PasswordInput } from "@/components/ui/PasswordInput/PasswordInput"
+import { Button } from "@/components/ui/button/Button";
+import { InputField } from "@/components/ui/InputField/InputField";
+import { PasswordInput } from "@/components/ui/PasswordInput/PasswordInput";
 
-import { sendOtpRequest, verifyOtpRequest } from "@/api/auth"
+import { sendOtpRequest, verifyOtpRequest } from "@/api/auth";
 
-import styles from "./AuthForm.module.css"
+import styles from "./AuthForm.module.css";
 
 type AuthFormProps = {
   mode: AuthMode;
@@ -143,17 +143,18 @@ export function AuthForm({ onSuccess, mode, setMode }: AuthFormProps) {
           disabled={isSubmitting}
           variant="primary"
           size="sm"
-          className={styles.authButtons}
+          className={`${styles.authButtons} ${isSubmitting ? styles.buttonLoading : ""}`}
         >
-          {isSubmitting
-            ? "Please wait..."
-            : mode === "login"
+          {isSubmitting && <div className={styles.loader}></div>}
+          <span className={styles.buttonText}>
+            {mode === "login"
               ? "Log In"
               : mode === "register"
                 ? "Register"
                 : mode === "forgot"
                   ? "Get Code"
                   : "Save New Password"}
+          </span>
         </Button>
       </div>
 

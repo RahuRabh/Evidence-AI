@@ -1,0 +1,103 @@
+.loadingContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(249, 250, 251, 0.7);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin: 1rem 0;
+  max-width: 85%;
+  animation: containerFadeIn 0.3s ease-out forwards;
+}
+
+.pipelineTracks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.trackStep {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: stepActivate 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stepPulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #9ca3af;
+  transition: all 0.3s ease;
+}
+
+.trackStep:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.trackStep:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.trackStep:nth-child(3) {
+  animation-delay: 1.5s;
+}
+.trackStep:nth-child(4) {
+  animation-delay: 2.8s;
+}
+
+/* Dynamic state shifts using CSS keyframe memory overrides */
+.trackStep:nth-child(1) .stepPulse {
+  animation: pulseGreen 1.5s infinite 0.2s;
+}
+.trackStep:nth-child(2) .stepPulse {
+  animation: pulseGreen 1.5s infinite 0.8s;
+}
+.trackStep:nth-child(3) .stepPulse {
+  animation: pulseGreen 1.5s infinite 1.5s;
+}
+.trackStep:nth-child(4) .stepPulse {
+  animation: pulseGreen 1.5s infinite 2.8s;
+}
+
+@keyframes containerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes stepActivate {
+  to {
+    opacity: 1;
+    color: #374151;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGreen {
+  0% {
+    background-color: #25b09b;
+    box-shadow: 0 0 0 0 rgba(37, 176, 155, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(37, 176, 155, 0);
+  }
+  100% {
+    background-color: #25b09b;
+    box-shadow: 0 0 0 0 rgba(37, 176, 155, 0);
+  }
+}

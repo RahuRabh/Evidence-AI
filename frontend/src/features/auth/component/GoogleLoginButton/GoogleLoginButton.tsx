@@ -49,8 +49,11 @@ export function GoogleLoginButton({ onClose }: GoogleLoginButtonProps) {
       )}
 
       <div
-        className={`${styles.container} ${isPending ? styles.pending : ""}.trim()`}
+        className={`${styles.container} ${isPending ? styles.pending : ""}`}
       >
+
+        {isPending && <div className={styles.loader}></div>}
+        
         <GoogleLogin
           onSuccess={handleSuccess}
           onError={() => {

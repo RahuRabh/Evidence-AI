@@ -70,7 +70,7 @@ export function Security() {
       />
 
       {error && <p className={styles.errorText}>{error}</p>}
-
+      {isSubmitting && <div className={styles.loader}></div>}
       <Button
         size="sm"
         type="submit"

@@ -53,14 +53,13 @@
 }
 
 .historySection h2 {
-  margin: 0% 0% 10px 0%;
-  padding-left: 12px;
+  margin: 0%;
 }
 
 .mutedText {
   color: #6b7280;
   font-size: 12px;
-  margin: 0%;
+  margin: 10px 0px;
   padding: 0%;
 }
 
