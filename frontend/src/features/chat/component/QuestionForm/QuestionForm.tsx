@@ -75,7 +75,7 @@ export function QuestionForm({
           <Button
             type="submit"
             disabled={isLoading}
-            size="sm"
+            size="md"
             variant="primary"
             className={styles.askButton}
           >

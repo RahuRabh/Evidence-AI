@@ -164,6 +164,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       await deleteMessageById(messageId);
       setMessages((current) => current.filter((msg) => msg.id !== messageId));
       await refreshSessions();
+      if (messageId === conversationId) resetChatState();
     } catch (requestError) {
       console.error("Failed to delete message", requestError);
       setError("Could not delete the message. Please try again.");

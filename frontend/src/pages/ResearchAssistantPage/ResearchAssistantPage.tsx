@@ -49,19 +49,18 @@ export function ResearchAssistantPage() {
     }
   };
 
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
+  const executeSearchFlow = async (queryText: string) => {
     if (!isAuthenticated) {
       openAuthModal();
       return;
     }
 
-    const trimmed = message.trim() || structuredContext.intent.trim();
+    const trimmed = queryText.trim();
     if (!trimmed) {
       toast.warning(
         "Please type a message query or select a patient intent input",
       );
+      return;
     }
 
     try {
@@ -71,6 +70,12 @@ export function ResearchAssistantPage() {
       toast.error("Unable to compile medical assistant response");
       setMessage(trimmed);
     }
+  };
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const fallBackQuery = message.trim() || structuredContext.intent.trim();
+    executeSearchFlow(fallBackQuery);
   };
 
   return (
@@ -86,20 +91,71 @@ export function ResearchAssistantPage() {
 
       <section className={styles.researchWorkspace}>
         <section className={styles.responsePanel}>
-          <Button
-            type="button"
-            size="icon"
-            onClick={() => setIsSidebarOpen(true)}
-            className={styles.sidebartoggleButton}
-          >
-            ☰
-          </Button>
+          <div className={styles.mobileHeaderBar}>
+            <Button
+              type="button"
+              size="icon"
+              onClick={() => setIsSidebarOpen(true)}
+              className={styles.sidebartoggleButton}
+            >
+              ☰
+            </Button>
+          </div>
 
           <div className={styles.chatWindow} aria-live="polite">
             {messages.length === 0 ? (
-              <div className={styles.emptyChat}>
-                <h2>Start a research session.</h2>
-                <p>Add a disease, query, and optional location below.</p>
+              <div className={styles.emptyLandingContainer}>
+                <header className={styles.landingHero}>
+                  <h1 className={styles.landingTitle}>
+                    Search Trusted Medical Evidence with AI
+                  </h1>
+                  <p className={styles.landingTagline}>
+                    EvidenceAI — Trusted Medical Research, Synthesized by AI.
+                  </p>
+
+                  <p className={styles.landingDescriptionText}>
+                    An intelligent synthesis engine that translates clinical
+                    intent, filters multi-source literature, and eliminates LLM
+                    hallucinations using algorithmic hybrid ranking.
+                  </p>
+                </header>
+
+                {/* 2. Source Grounding Trust Strip */}
+                <div className={styles.trustBanner}>
+                  <span className={styles.trustLabel}>
+                    Grounded in literature from:
+                  </span>
+                  <div className={styles.trustBadges}>
+                    <span className={styles.badge}>PubMed</span>
+                    <span className={styles.badge}>OpenAlex</span>
+                    <span className={styles.badge}>ClinicalTrials.gov</span>
+                  </div>
+                </div>
+
+                {/* 3. Interactive Floating Prompt Suggestions */}
+                <section className={styles.promptSection}>
+                  <h3 className={styles.sectionHeading}>
+                    Try starting your research session with:
+                  </h3>
+                  <div className={styles.promptGrid}>
+                    {[
+                      "Latest GLP-1 obesity studies",
+                      "Compare Ozempic vs Wegovy efficacy profiles",
+                      "Find ongoing trials for triple-negative breast cancer",
+                      "Show contradictory findings on microplastics in cardiovascular health",
+                    ].map((queryOption) => (
+                      <button
+                        key={queryOption}
+                        type="button"
+                        className={styles.floatingPromptCard}
+                        onClick={() => executeSearchFlow(queryOption)}
+                      >
+                        <span className={styles.promptText}>{queryOption}</span>
+                        <span className={styles.promptArrow}>&rarr;</span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
               </div>
             ) : (
               messages?.map((item) =>
@@ -125,10 +181,10 @@ export function ResearchAssistantPage() {
                 ),
               )
             )}
-            
+
             {/* If loading show loading messages */}
             {isLoading && <LoadingPipeline />}
-
+            
           </div>
 
           <QuestionForm
