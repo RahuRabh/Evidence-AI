@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { getChatSession, processChatRequest, listChatSessions, deleteChatMessage } from "../services/chat/chat.service.js";
+import { getChatSession, processChatRequest, listChatSessions, deleteChatMessage, renameChatSessions } from "../services/chat/chat.service.js";
 import { asyncHandler } from "../utils/async-handler.js";
 
 const chatBodySchema = z.object({
@@ -39,6 +39,15 @@ export const getChatSessionById = asyncHandler(async (req, res) => {
 export const deleteSessionById = asyncHandler(async (req, res) => {
   const conversationId = req.params.conversationId;
   const result =  await deleteChatMessage(conversationId, req.user.userId);
+
+  res.status(200).json(result);
+})
+
+export const updateSessionById = asyncHandler(async (req, res) => {
+  const conversationId = req.params.conversationId;
+  const {newTitle} = req.body;
+
+  const result = await renameChatSessions(conversationId, req.user.userId, newTitle);
 
   res.status(200).json(result);
 })

@@ -4,10 +4,11 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 import { makeId, mapStoredMessagesToChatMessages } from "./chatHelpers";
 
 import {
-  deleteMessageById,
+  deleteConversationById,
   getChatSession,
   getChatSessions,
   sendChatMessage,
+  UpdateConversationById,
 } from "@/api/chat";
 
 import type {
@@ -30,7 +31,8 @@ export type ChatContextType = {
   refreshSessions: () => Promise<void>;
   openSession: (sessionId: string) => Promise<void>;
   sendMessage: (textContent: string) => Promise<void>;
-  deleteMessage: (messageId: string | null) => Promise<void>;
+  deleteConversation: (messageId: string | null) => Promise<void>;
+  updateConversation: (conversationId: string | null, newTitle: string | null) => Promise<void>;
 };
 
 export const ChatContext = createContext<ChatContextType | null>(null);
@@ -157,17 +159,31 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const deleteMessage = async (messageId: typeof conversationId) => {
+  const deleteConversation = async (messageId: typeof conversationId) => {
     setIsLoading(true);
     setError("");
     try {
-      await deleteMessageById(messageId);
+      await deleteConversationById(messageId);
       setMessages((current) => current.filter((msg) => msg.id !== messageId));
       await refreshSessions();
       if (messageId === conversationId) resetChatState();
     } catch (requestError) {
       console.error("Failed to delete message", requestError);
       setError("Could not delete the message. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateConversation = async (conversationId: string | null, newTitle: string | null) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      await UpdateConversationById(conversationId, newTitle);
+      await refreshSessions();
+    } catch (requestError) {
+      console.error("Failed to rename conversation", requestError);
+      setError("Could not rename the conversation. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -189,7 +205,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         refreshSessions,
         openSession,
         sendMessage,
-        deleteMessage,
+        deleteConversation,
+        updateConversation,
       }}
     >
       {children}

@@ -40,8 +40,21 @@ export async function getChatSession(sessionId: string) {
   return response.data;
 }
 
-export async function deleteMessageById(conversationId: string | null) {
-  const response = await api.delete(`/chat/conversation/${conversationId}`);
+export async function deleteConversationById(conversationId: string | null) {
+  const response = await api.delete(
+    `/chat/deleteConversation/${conversationId}`,
+  );
+
+  return response.data;
+}
+
+export async function UpdateConversationById(
+  conversationId: string | null,
+  newTitle: string | null,
+) {
+  const response = await api.put(`/chat/updateConversation/${conversationId}`, {
+    newTitle: newTitle?.trim(),
+  });
 
   return response.data;
 }

@@ -13,6 +13,7 @@ import { SessionListItem } from "@/components/ui/SessionList/SessionListItem";
 import { getInitials } from "@/utils/genInitials";
 
 import styles from "./Sidebar.module.css";
+import { toast } from "sonner";
 
 type SidebarProps = {
   sessions: ChatSessionSummary[];
@@ -31,7 +32,7 @@ export function Sidebar({
   onNewConversation,
   onOpenSession,
 }: SidebarProps) {
-  const { deleteMessage } = useChat();
+  const { deleteConversation, updateConversation } = useChat();
   const { isAuthenticated, user, openAuthModal } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -90,13 +91,17 @@ export function Sidebar({
                   onOpenSession(session.id);
                   onCloseSidebar();
                 }}
-                onDelete={() => {
-                  // Prompt for confirmation, then call your delete API/Context
+                onDelete={ async () => {
                   if (
                     window.confirm("Are you sure you want to delete this chat?")
                   ) {
-                    deleteMessage(conversationId);
+                    await deleteConversation(conversationId);
+                    toast.success("Conversation Deleted");
                   }
+                }}
+                onRename={async (newTitle) => {
+                  await updateConversation(conversationId, newTitle)
+                  toast.success("Title renamed");
                 }}
               />
             ))

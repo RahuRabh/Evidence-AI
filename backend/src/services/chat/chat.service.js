@@ -32,6 +32,14 @@ async function getOrCreateConversation(conversationId, context, userId) {
       throw new AppError("Conversation not found", 404);
     }
 
+    // Only auto-update the title if the current title is completely blank or matches the initial placeholder.
+    if (!conversation.title || conversation.title === "New research session") {
+      const derivedTitle = context.disease?.trim() || context.intent?.trim();
+      if (derivedTitle) {
+        conversation.title = derivedTitle;
+      }
+    }
+
     conversation.patientName = getContextValue(
       context.patientName,
       conversation.patientName,
@@ -53,8 +61,14 @@ async function getOrCreateConversation(conversationId, context, userId) {
     return conversation;
   }
 
+  // 3. INITIAL CREATION BLOCK (With fixed typo references)
+  const initialDisease = context.disease?.trim();
+  const initialIntent = context.intent?.trim();
+  const initialTitle = initialDisease || initialIntent;
+
   return Conversation.create({
     userId,
+    title: initialTitle,
     patientName: context.patientName?.trim() ?? "",
     activeDisease: context.disease?.trim() ?? "",
     activeIntent: context.intent?.trim() ?? "",
@@ -139,7 +153,7 @@ export async function processChatRequest(input) {
       conditionOverview:
         "The language model is temporarily unavailable. Showing the strongest ranked evidence instead.",
       researchInsights: ranking.topSources
-        .slice(0, 3)
+        .slice(0, 8)
         .map((source) => source.title),
       clinicalTrials: ranking.topSources
         .filter((source) => source.type === "clinical_trial")
@@ -206,12 +220,7 @@ export async function listChatSessions(userId) {
 
   return conversations.map((conversation) => ({
     id: conversation._id.toString(),
-    title:
-      conversation.activeDisease || conversation.activeIntent
-        ? [conversation.activeDisease, conversation.activeIntent]
-            .filter(Boolean)
-            .join(" - ")
-        : "Untitled research session",
+    title: conversation.title?.trim() || "research session",
     patientName: conversation.patientName,
     activeDisease: conversation.activeDisease,
     activeIntent: conversation.activeIntent,
@@ -251,7 +260,6 @@ export async function getChatSession(conversationId, userId) {
 }
 
 export async function deleteChatMessage(conversationId, userId) {
-
   if (!Types.ObjectId.isValid(conversationId)) {
     throw new AppError("Invalid conversation ID", 400);
   }
@@ -264,12 +272,44 @@ export async function deleteChatMessage(conversationId, userId) {
   if (!conversation) {
     throw new AppError("Unauthorized: You do not own this conversation", 403);
   }
-  
+
   await Conversation.findByIdAndDelete(conversationId);
   await Message.deleteMany({ conversationId: conversationId });
-  
-  return { 
+
+  return {
     success: true,
-    conversationId: conversationId 
+    conversationId: conversationId,
+  };
+}
+
+export async function renameChatSessions(conversationId, userId, newTitle) {
+  if (!Types.ObjectId.isValid(conversationId)) {
+    throw new AppError("Invalid conversation ID", 400);
+  }
+
+  const trimmedTitle = newTitle?.trim();
+  if (!trimmedTitle) {
+    throw new AppError("Title content cannot be blank", 400);
+  }
+
+  const updatedConversation = await Conversation.findOneAndUpdate(
+    {
+      _id: conversationId,
+      userId: userId,
+    },
+    {
+      $set: { title: trimmedTitle },
+    },
+    { returnDocument: 'after' }
+  ).lean();
+
+  if (!updatedConversation) {
+    throw new AppError("Unauthorized: You do not own this conversation", 403);
+  }
+
+  return {
+    success: true,
+    message: "Title updated successfuly",
+    conversation: updatedConversation,
   };
 }

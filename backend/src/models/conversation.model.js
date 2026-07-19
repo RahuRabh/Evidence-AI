@@ -8,6 +8,11 @@ const conversationSchema = new Schema(
       required: true,
       index: true,
     },
+    title: {
+      type: String,
+      trim: true,
+      default: "New research session"
+    },
     patientName: {
       type: String,
       trim: true,
